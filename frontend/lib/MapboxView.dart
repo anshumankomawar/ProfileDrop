@@ -1,5 +1,6 @@
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/Database.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 
 class MapboxView extends StatefulWidget {
@@ -13,6 +14,7 @@ class MapboxView extends StatefulWidget {
 class _MapboxViewState extends State<MapboxView> {
   @override
   Widget build(BuildContext context) {
+    MongoDatabase.getDocuments();
     return FlutterMap(
         options: MapOptions(
           center: latlng.LatLng(35.2828, -120.6596),

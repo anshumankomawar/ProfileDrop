@@ -38,6 +38,7 @@ dependencies:
   latlng: ^0.1.0
   latlong2: ^0.8.1
   sliding_up_panel: ^2.0.0+1
+  mongo_dart: ^0.7.4+1
 
 dev_dependencies:
   flutter_test:

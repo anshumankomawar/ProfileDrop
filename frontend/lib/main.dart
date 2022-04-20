@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/Database.dart';
 import 'package:frontend/MapboxView.dart';
 
 import 'BottomPanel.dart';
@@ -34,16 +35,32 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Stack(
-          children: const [
-            MapboxView(),
-            BottomPanel()
-          ]
-
-        )
-      ),
+    return FutureBuilder(
+      future: MongoDatabase.connect(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Show loading indicator
+          return Container();
+        } else {
+          if (snapshot.hasError) {
+            // Return error
+            print("ERHERE");
+            return Container();
+          } else {
+            // Return Listview with documents data
+            return Scaffold(
+              body: Center(
+                  child: Stack(
+                      children: const [
+                        MapboxView(),
+                        BottomPanel()
+                      ]
+                  )
+              ),
+            );
+          }
+        }
+      }
     );
   }
 }
