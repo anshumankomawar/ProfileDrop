@@ -13,7 +13,7 @@ class MongoDatabase {
 
   static Future<List<Map<String, dynamic>>> getDocuments() async {
     final users = await userCollection.find().toList();
-    print(users);
+    // print(users);
     return users;
   }
 

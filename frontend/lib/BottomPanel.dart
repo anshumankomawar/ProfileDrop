@@ -59,6 +59,7 @@ class _BottomPanelState extends State<BottomPanel> {
   Widget _panel(ScrollController sc, List<bool> isSelected, List<String> dropdownValue) {
     List<String> _states = ["Active", "Inactive", "Friends", "Privacy"];
     List<MaterialColor> _colors = [Colors.green, Colors.yellow, Colors.blue, Colors.grey];
+    final List<String> items = ["Person 1", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2"];
     return MediaQuery.removePadding(
         context: context,
         removeTop: true,
@@ -121,6 +122,21 @@ class _BottomPanelState extends State<BottomPanel> {
                     ],
                   ),
                 ),
+                Flexible(
+                  flex: 2,
+                  child: ListView.builder(
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(items[index]),
+                      );
+                    },
+                  ),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Container(color: Colors.green)
+                )
               ],
             ),
           )
