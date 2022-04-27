@@ -11,6 +11,7 @@ class MongoDatabase {
     userCollection = db.collection(USER_COLLECTION);
   }
 
+
   static Future<List> getDocuments() async {
     await db.createIndex('users', keys: {'location': '2dsphere'});
     // print("Created index");
@@ -53,7 +54,6 @@ class MongoDatabase {
     //   }
     // }).toList();
     return result;
-  }
 
   static insert(User user) async {
     await userCollection.insertAll([user.toMap()]);
