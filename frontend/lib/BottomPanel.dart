@@ -1,3 +1,4 @@
+import 'package:frontend/main.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter/material.dart';
 
@@ -143,9 +144,18 @@ class _BottomPanelState extends State<BottomPanel> {
                       Container(
                         padding: EdgeInsets.only(top: 4.0),
                         decoration: const BoxDecoration(
-                        shape: BoxShape.circle
-                      ),
-                      child: const Icon(Icons.person, color: Colors.black, size: 32,),
+                          shape: BoxShape.circle
+                        ),
+                        // child: const Icon(Icons.person, color: Colors.black, size: 32,),
+                        child: GestureDetector(
+                          child: const Icon(Icons.person, size: 32,),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Profile()),
+                            );
+                          }, 
+                        )
                       )
                     ],
                   ),
