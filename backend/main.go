@@ -14,6 +14,7 @@ func main() {
     })
 
     configs.ConnectDB()
+    configs.CreateIndex(configs.DB, "users")
 
     //routes
     routes.UserRoute(app)

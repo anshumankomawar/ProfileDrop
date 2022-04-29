@@ -7,6 +7,7 @@ import (
     "time"
     "go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/mongo/options"
+    "go.mongodb.org/mongo-driver/x/bsonx"
 )
 
 func ConnectDB() *mongo.Client  {
@@ -37,4 +38,28 @@ var DB *mongo.Client = ConnectDB()
 func GetCollection(client *mongo.Client, collectionName string) *mongo.Collection {
     collection := client.Database("golangAPI").Collection(collectionName)
     return collection
+}
+
+func CreateIndex(client *mongo.Client, collectionName string) error {
+    ctx, cancel := context.
+        WithTimeout(context.Background(), 10*time.Second)
+    defer cancel()
+    db := client.Database("golangAPI")
+    indexOpts := options.CreateIndexes().
+        SetMaxTime(time.Second * 10)
+    // Index to location 2dsphere type.
+    pointIndexModel := mongo.IndexModel{
+        Options: options.Index().SetBackground(true),
+        Keys:    bsonx.MDoc{"location": bsonx.String("2dsphere")},
+    }
+    pointIndexes := db.Collection(collectionName).Indexes()
+    _, err := pointIndexes.CreateOne(
+        ctx,
+        pointIndexModel,
+        indexOpts,
+    )
+    if err != nil {
+        return err
+    }
+    return nil
 }
