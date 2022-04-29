@@ -59,7 +59,35 @@ class _BottomPanelState extends State<BottomPanel> {
   Widget _panel(ScrollController sc, List<bool> isSelected, List<String> dropdownValue) {
     List<String> _states = ["Active", "Inactive", "Friends", "Privacy"];
     List<MaterialColor> _colors = [Colors.green, Colors.yellow, Colors.blue, Colors.grey];
-    final List<String> items = ["Person 1", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2", "Person 2"];
+    final List<Card> items = [
+      Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const ListTile(
+              leading: Icon(Icons.album),
+              title: Text('"NAME"'),
+              subtitle: Text('"CONVERSATIONSTARTER"'),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  child: const Text('CONNECT'),
+                  onPressed: () {/* ... */},
+                ),
+                const SizedBox(width: 8),
+                TextButton(
+                  child: const Text('MORE'),
+                  onPressed: () {/* ... */},
+                ),
+                const SizedBox(width: 8),
+              ],
+            ),
+          ],
+        ),
+      )
+    ];
     return MediaQuery.removePadding(
         context: context,
         removeTop: true,
@@ -128,7 +156,7 @@ class _BottomPanelState extends State<BottomPanel> {
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        title: Text(items[index]),
+                        title: (items[index]),
                       );
                     },
                   ),
