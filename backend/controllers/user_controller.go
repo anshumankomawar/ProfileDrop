@@ -1,19 +1,20 @@
 package controllers
 
 import (
-    "context"
-    "backend/config"
-    "backend/models"
-    "backend/responses"
-    "net/http"
-    "time"
-  
-    "github.com/go-playground/validator/v10"
-    "github.com/gofiber/fiber/v2"
-    "go.mongodb.org/mongo-driver/bson/primitive"
-    "go.mongodb.org/mongo-driver/mongo"
+	"backend/config"
+	"backend/models"
+	"backend/responses"
+	"context"
+	"fmt"
+	"net/http"
+	"time"
 
-    "go.mongodb.org/mongo-driver/bson"
+	"github.com/go-playground/validator/v10"
+	"github.com/gofiber/fiber/v2"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 var userCollection *mongo.Collection = configs.GetCollection(configs.DB, "users")
@@ -40,6 +41,7 @@ func CreateUser(c *fiber.Ctx) error {
         Location: user.Location,
         Title:    user.Title,
     }
+    fmt.Println(user);
 
     result, err := userCollection.InsertOne(ctx, newUser)
     if err != nil {
