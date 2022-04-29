@@ -1,3 +1,4 @@
+import 'package:frontend/Events/EventScroller.dart';
 import 'package:frontend/main.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,8 @@ class _BottomPanelState extends State<BottomPanel> {
       body: Container(),
       panelBuilder: (sc) => _panel(sc, isSelected, dropdownValue),
       borderRadius: const BorderRadius.only(
-          topLeft: const Radius.circular(18.0), topRight: const Radius.circular(18.0)),
+          topLeft: const Radius.circular(18.0),
+          topRight: const Radius.circular(18.0)),
       onPanelSlide: (double pos) => setState(() {}),
     );
   }
@@ -36,10 +38,7 @@ class _BottomPanelState extends State<BottomPanel> {
     return Row(
       children: [
         Container(
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
           width: 12,
           height: 12,
           padding: const EdgeInsets.all(10),
@@ -57,128 +56,110 @@ class _BottomPanelState extends State<BottomPanel> {
     );
   }
 
-  Widget _panel(ScrollController sc, List<bool> isSelected, List<String> dropdownValue) {
+  Widget _panel(
+      ScrollController sc, List<bool> isSelected, List<String> dropdownValue) {
     List<String> _states = ["Active", "Inactive", "Friends", "Privacy"];
-    List<MaterialColor> _colors = [Colors.green, Colors.yellow, Colors.blue, Colors.grey];
-    final List<Card> items = [
-      Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const ListTile(
-              leading: Icon(Icons.album),
-              title: Text('"NAME"'),
-              subtitle: Text('"CONVERSATIONSTARTER"'),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                TextButton(
-                  child: const Text('CONNECT'),
-                  onPressed: () {/* ... */},
-                ),
-                const SizedBox(width: 8),
-                TextButton(
-                  child: const Text('MORE'),
-                  onPressed: () {/* ... */},
-                ),
-                const SizedBox(width: 8),
-              ],
-            ),
-          ],
-        ),
-      )
+    List<MaterialColor> _colors = [
+      Colors.green,
+      Colors.yellow,
+      Colors.blue,
+      Colors.grey
+    ];
+    final List<String> items = [
+      "Person 1",
+      "Person 2",
+      "Person 2",
+      "Person 2",
+      "Person 2",
+      "Person 2",
+      "Person 2",
+      "Person 2",
+      "Person 2",
+      "Person 2",
+      "Person 2",
+      "Person 2",
+      "Person 2",
+      "Person 2"
     ];
     return MediaQuery.removePadding(
         context: context,
         removeTop: true,
         child: SizedBox(
-          height: _panelHeightClosed,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Column(
-              children: [
-                Container(
-                  width: 60,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.4),
-                    borderRadius: const BorderRadius.all(Radius.circular(4))
+            height: _panelHeightClosed,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Column(
+                children: [
+                  Container(
+                    width: 60,
+                    height: 4,
+                    decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.4),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(4))),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                        const Text("Richard Yu", 
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Richard Yu",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 4,
+                            ),
+                            SizedBox(
+                              width: 65,
+                              height: 25,
+                              child: PageView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 4,
+                                  itemBuilder: (_, i) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(1.0),
+                                      child: _stateItem(_states[i], _colors[i]),
+                                    );
+                                  }),
+                            )
+                          ],
                         ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        SizedBox(
-                          width: 65,
-                          height: 25,
-                          child: PageView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 4,
-                            itemBuilder: (_, i) {
-                              return Padding(
-                                padding: const EdgeInsets.all(1.0),
-                                child: _stateItem(_states[i], _colors[i]),
-                              );
-                            }
+                        const Spacer(),
+                        Container(
+                          padding: EdgeInsets.only(top: 4.0),
+                          decoration:
+                              const BoxDecoration(shape: BoxShape.circle),
+                          child: const Icon(
+                            Icons.person,
+                            color: Colors.black,
+                            size: 32,
                           ),
                         )
-                        ],
-                      ),
-                      const Spacer(),
-                      Container(
-                        padding: EdgeInsets.only(top: 4.0),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle
-                        ),
-                        // child: const Icon(Icons.person, color: Colors.black, size: 32,),
-                        child: GestureDetector(
-                          child: const Icon(Icons.person, size: 32,),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const Profile()),
-                            );
-                          }, 
-                        )
-                      )
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: ListView.builder(
-                    itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: (items[index]),
-                      );
-                    },
+                  Flexible(
+                    flex: 3,
+                    child: ListView.builder(
+                      itemCount: items.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(items[index]),
+                        );
+                      },
+                    ),
                   ),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: Container(color: Colors.green)
-                )
-              ],
-            ),
-          )
-        )
-    );
+                  Flexible(flex: 2, child: EventScroller())
+                ],
+              ),
+            )));
   }
 }
