@@ -54,6 +54,7 @@ class MongoDatabase {
     //   }
     // }).toList();
     return result;
+  }
 
   static insert(User user) async {
     await userCollection.insertAll([user.toMap()]);
