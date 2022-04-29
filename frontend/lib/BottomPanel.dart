@@ -1,4 +1,5 @@
 import 'package:frontend/Events/EventScroller.dart';
+import 'package:frontend/main.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter/material.dart';
 
