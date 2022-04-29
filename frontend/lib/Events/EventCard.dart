@@ -15,6 +15,8 @@ class EventCard extends StatefulWidget {
 class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
+    DateFormat timeFormat = DateFormat('hh:mm a');
+    String eventTime = timeFormat.format(widget.eventDate);
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
@@ -58,15 +60,7 @@ class _EventCardState extends State<EventCard> {
                                   "\n",
                           style: const TextStyle(fontSize: 16.0)),
                       TextSpan(
-                          text: (widget.eventDate.hour % 12 == 0
-                                      ? 12
-                                      : widget.eventDate.hour % 12)
-                                  .toString() +
-                              ":" +
-                              (widget.eventDate.minute < 10
-                                  ? "0" + widget.eventDate.minute.toString()
-                                  : widget.eventDate.minute.toString()) +
-                              (widget.eventDate.hour < 12 ? " AM" : " PM"),
+                          text: eventTime,
                           style: const TextStyle(fontSize: 14.0)),
                     ],
                   ),
