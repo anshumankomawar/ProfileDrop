@@ -1,5 +1,8 @@
 import 'package:frontend/Events/EventScroller.dart';
 import 'package:frontend/main.dart';
+import 'package:frontend/models/Location.dart';
+import 'package:frontend/models/User.dart';
+import 'package:mongo_dart/mongo_dart.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter/material.dart';
 
@@ -65,21 +68,72 @@ class _BottomPanelState extends State<BottomPanel> {
       Colors.blue,
       Colors.grey
     ];
-    final List<String> items = [
-      "Person 1",
-      "Person 2",
-      "Person 2",
-      "Person 2",
-      "Person 2",
-      "Person 2",
-      "Person 2",
-      "Person 2",
-      "Person 2",
-      "Person 2",
-      "Person 2",
-      "Person 2",
-      "Person 2",
-      "Person 2"
+
+    User currentUser = User(id: ObjectId(), location: Location(id: ObjectId(), type: "type", coordinates: [-127, 140]), firstName: "firstName", lastName: "lastName", phoneNumber: "phoneNumber");
+    List<User> users = [
+      User(
+          id: ObjectId(), location: Location(id: ObjectId(), type: "type", coordinates: [-128, 141]), firstName: "firstName", lastName: "lastName", phoneNumber: "phoneNumber"),
+      User(
+          id: ObjectId(), location: Location(id: ObjectId(), type: "type", coordinates: [-128, 142]), firstName: "firstName", lastName: "lastName", phoneNumber: "phoneNumber"),
+      User(
+          id: ObjectId(), location: Location(id: ObjectId(), type: "type", coordinates: [128, 141]), firstName: "firstName", lastName: "lastName", phoneNumber: "phoneNumber"),
+    ];
+    users.sort((a,b) => (a.location.distanceTo(currentUser.location)).compareTo(b.location.distanceTo(currentUser.location)));
+    List<Card> items = [
+      Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.album),
+              title: Text((users[0].firstName) + " " + (users[0].lastName)),
+              subtitle: Text(users[0].phoneNumber),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  child: const Text('CONNECT'),
+                  onPressed: () {/* ... */},
+                ),
+                const SizedBox(width: 8),
+                TextButton(
+                  child: const Text('MORE'),
+                  onPressed: () {/* ... */},
+                ),
+                const SizedBox(width: 8),
+              ],
+            ),
+          ],
+        ),
+      ),
+      Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const ListTile(
+              leading: Icon(Icons.album),
+              title: Text('"NAME"'),
+              subtitle: Text('"CONVERSATIONSTARTER"'),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  child: const Text('CONNECT'),
+                  onPressed: () {/* ... */},
+                ),
+                const SizedBox(width: 8),
+                TextButton(
+                  child: const Text('MORE'),
+                  onPressed: () {/* ... */},
+                ),
+                const SizedBox(width: 8),
+              ],
+            ),
+          ],
+        ),
+      ),
     ];
     return MediaQuery.removePadding(
         context: context,
@@ -152,7 +206,7 @@ class _BottomPanelState extends State<BottomPanel> {
                       itemCount: items.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          title: Text(items[index]),
+                          title: items[index],
                         );
                       },
                     ),
