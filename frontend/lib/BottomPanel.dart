@@ -1,4 +1,4 @@
-
+import 'package:frontend/NearbyUserList.dart';
 import 'package:frontend/Profile.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/Events/EventScroller.dart';
@@ -74,46 +74,8 @@ class _BottomPanelState extends State<BottomPanel> {
       Colors.grey
     ];
 
-    //User currentUser = User(id: , location: Location(id: ObjectId(), type: "type", coordinates: [-127, 140]), firstName: "firstName", lastName: "lastName", phoneNumber: "phoneNumber");
-    // List<User> users = //getDocuments()
-    // [
-    //   User(
-    //       id: ObjectId(), location: Location(id: ObjectId(), type: "type", coordinates: [-128, 141]), firstName: "firstName", lastName: "lastName", phoneNumber: "phoneNumber"),
-    //   User(
-    //       id: ObjectId(), location: Location(id: ObjectId(), type: "type", coordinates: [-128, 142]), firstName: "firstName", lastName: "lastName", phoneNumber: "phoneNumber"),
-    //   User(
-    //       id: ObjectId(), location: Location(id: ObjectId(), type: "type", coordinates: [128, 141]), firstName: "firstName", lastName: "lastName", phoneNumber: "phoneNumber"),
-    // ];
     // users.sort((a,b) => (a.location.distanceTo(currentUser.location)).compareTo(b.location.distanceTo(currentUser.location)));
-    // List<Card> items = [
-    //   Card(
-    //     child: Column(
-    //       mainAxisSize: MainAxisSize.min,
-    //       children: <Widget>[
-    //         const ListTile(
-    //           leading: Icon(Icons.album),
-    //           title: Text('"NAME"'),
-    //           subtitle: Text('"CONVERSATIONSTARTER"'),
-    //         ),
-    //         Row(
-    //           mainAxisAlignment: MainAxisAlignment.end,
-    //           children: <Widget>[
-    //             TextButton(
-    //               child: const Text('CONNECT'),
-    //               onPressed: () {/* ... */},
-    //             ),
-    //             const SizedBox(width: 8),
-    //             TextButton(
-    //               child: const Text('MORE'),
-    //               onPressed: () {/* ... */},
-    //             ),
-    //             const SizedBox(width: 8),
-    //           ],
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // ];
+
     return MediaQuery.removePadding(
         context: context,
         removeTop: true,
@@ -181,42 +143,31 @@ class _BottomPanelState extends State<BottomPanel> {
                   ),
                   Flexible(
                     flex: 3,
-                    child: ListView.builder(
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              ListTile(
-                                leading: Icon(Icons.album),
-                                title: Text("first" + " " + "last"),
-                                subtitle: Text("phone"),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  TextButton(
-                                    child: const Text('CONNECT'),
-                                    onPressed: () {/* ... */},
-                                  ),
-                                  const SizedBox(width: 8),
-                                  TextButton(
-                                    child: const Text('MORE'),
-                                    onPressed: () {/* ... */},
-                                  ),
-                                  const SizedBox(width: 8),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                    child: FutureBuilder(
+                  future: MongoDatabase.getUser("627473ddc4e28c74aa3a0c2b"),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Show loading indicator
+                    return Container();
+                  } else {
+
+                    if (snapshot.hasError) {
+                      // Return error
+                      print("bottompanel");
+                      print(snapshot.error);
+                      return Container();
+                    } else {
+                      // Return Listview with documents data
+                      print(snapshot.data);
+                      return NearbyUserList(user: snapshot.data as User);
+                    }
+                  }
+                })
                   ),
                   Flexible(flex: 2, child: EventScroller())
                 ],
               ),
-            )));
+            )
+    ));
   }
 }

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:frontend/Database.dart';
 import 'package:frontend/MapboxView.dart';
 
+
 import 'BottomPanel.dart';
 import 'Profile.dart';
+import 'models/User.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,14 +53,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
             if (snapshot.hasError) {
               // Return error
-              print("ERHERE");
+              print("main");
               return Container();
             } else {
               // Return Listview with documents data
+              print(snapshot.data);
               return Scaffold(
                 body: Center(
                     child:
-                        Stack(children: const [MapboxView(), BottomPanel()])),
+                        Stack(children: [MapboxView(), BottomPanel()])),
               );
             }
           }
