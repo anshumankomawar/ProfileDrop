@@ -170,11 +170,15 @@ class _BottomPanelState extends State<BottomPanel> {
                           padding: EdgeInsets.only(top: 4.0),
                           decoration:
                               const BoxDecoration(shape: BoxShape.circle),
-                          child: const Icon(
-                            Icons.person,
-                            color: Colors.black,
-                            size: 32,
-                          ),
+                          child: GestureDetector(
+                            child: const Icon(Icons.person, size: 32,),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const Profile()),
+                              );
+                            }, 
+                          )
                         )
                       ],
                     ),
