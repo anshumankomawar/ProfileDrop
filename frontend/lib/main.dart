@@ -39,35 +39,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: MongoDatabase.connect(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // Show loading indicator
-          return Container();
-        } else {
-          if (snapshot.hasError) {
-            // Return error
-            print("ERHERE");
+        future: MongoDatabase.connect(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Show loading indicator
             return Container();
           } else {
-            // Return Listview with documents data
-            return Scaffold(
-              body: Center(
-                  child: Stack(
-                      children: const [
-                        MapboxView(),
-                        BottomPanel(),
-                      ]
-                  )
-              ),
-            );
+
+            if (snapshot.hasError) {
+              // Return error
+              print("ERHERE");
+              return Container();
+            } else {
+              // Return Listview with documents data
+              return Scaffold(
+                body: Center(
+                    child:
+                        Stack(children: const [MapboxView(), BottomPanel()])),
+              );
+            }
           }
-        }
-      }
-    );
+        });
   }
 }
