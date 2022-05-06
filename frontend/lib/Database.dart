@@ -11,21 +11,8 @@ class MongoDatabase {
     userCollection = db.collection(USER_COLLECTION);
   }
 
-
   static Future<List> getDocuments() async {
     await db.createIndex('users', keys: {'location': '2dsphere'});
-    // print("Created index");
-    // await userCollection.insertOne({
-    //   "location": {
-    //     "type": "Point",
-    //     "coordinates":  [-130, 47]
-    //   },
-    //   "username": "First User",
-    //   "firstName": "Anshu",
-    //   "lastName": "Black",
-    //   "phoneNumber" : "8057561111"
-    // });
-    // print("Inserted User");
     var _loc = {
       'type': 'Point',
       'coordinates': [-130.01, 47]
@@ -37,22 +24,19 @@ class MongoDatabase {
       print(data);
       result.add(data);
     });
+    return result;
+  }
 
-    // final users = await userCollection.find({
-    //   "location": {
-    //     "\$near": {
-    //       {
-    //         "\$geometry": {
-    //           "type": "Point",
-    //           "coordinates": [47, 122.33]
-    //         },
-    //         "\$maxDistance": 15000,
-    //         "\$minDistance": 0
-    //
-    //       }
-    //     }
-    //   }
-    // }).toList();
+  static Future<List> getNearbyUsers(List<double> coords) async {
+    await db.createIndex('users', keys: {'location': '2dsphere'});
+    var _loc = {'type': 'Point', 'coordinates': coords};
+    var result = [];
+    await userCollection
+        .find(where.near("location", _loc, 2000))
+        .forEach((data) {
+      print(data);
+      result.add(data);
+    });
     return result;
   }
 
