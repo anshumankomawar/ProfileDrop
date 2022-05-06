@@ -11,6 +11,13 @@ class MongoDatabase {
     userCollection = db.collection(USER_COLLECTION);
   }
 
+  static Future<User> getUser(String userId) async{
+    print("hi");
+    var result = await userCollection.findOne(where.id(ObjectId.parse(userId)));
+    print(result['_id']);
+    return User.fromMap(result);
+  }
+
   static Future<List> getDocuments() async {
     await db.createIndex('users', keys: {'location': '2dsphere'});
     var _loc = {

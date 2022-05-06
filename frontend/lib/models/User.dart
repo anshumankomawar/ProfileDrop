@@ -33,7 +33,7 @@ class User {
 
   User.fromMap(Map<String, dynamic> map)
       : id = map['_id'],
-        location = map['location'],
+        location = Location.fromMap(map['location']),
         // username = map['username'],
         firstName = map['firstName'],
         lastName = map['lastName'],

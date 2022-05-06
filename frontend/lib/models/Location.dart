@@ -24,7 +24,7 @@ class Location {
   Location.fromMap(Map<String, dynamic> map)
       : id = map['_id'],
         type = map['type'],
-        coordinates = map['coordinates'];
+        coordinates = map['coordinates'].cast<double>();
 
   double distanceTo(Location loc2){
     double xDiff = this.coordinates[0] - loc2.coordinates[0];
