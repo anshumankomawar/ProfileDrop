@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:mongo_dart/mongo_dart.dart';
 
 class Location {
@@ -23,4 +25,10 @@ class Location {
       : id = map['_id'],
         type = map['type'],
         coordinates = map['coordinates'];
+
+  double distanceTo(Location loc2){
+    double xDiff = this.coordinates[0] - loc2.coordinates[0];
+    double yDiff = this.coordinates[1] - loc2.coordinates[1];
+    return sqrt(xDiff*xDiff + yDiff*yDiff);
+  }
 }
