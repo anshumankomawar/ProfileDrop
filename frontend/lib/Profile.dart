@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/Database.dart';
+import 'package:frontend/models/Location.dart';
+import 'package:frontend/models/User.dart';
+import 'package:mongo_dart/mongo_dart.dart' show ObjectId;
 
 class Profile extends StatefulWidget {
   const Profile({ Key? key }) : super(key: key);
@@ -30,18 +34,18 @@ class _ProfileState extends State<Profile> {
                 ),
                 GestureDetector(
                   child: const Icon(Icons.save, size: 32),
-                  onTap: () {
-                    // const snackBar = SnackBar(
-                    //   content: Text('Successfully saved user information'),
-                    // );
-
-                    // // Find the ScaffoldMessenger in the widget tree
-                    // // and use it to show a SnackBar.
-                    // Navigator.pop(context);
-                    // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  onTap: () async {
                     if (_formKey.currentState!.validate()) {
                       // If the form is valid, display a snackbar. In the real world,
                       // you'd often call a server or save the information in a database.
+                      User user = User(
+                        id: ObjectId(),
+                        location: Location(id: ObjectId(), type: "Point", coordinates: [-137, 40]),
+                        firstName: "test",
+                        lastName: "test",
+                        phoneNumber: "sdf"
+                      );
+                      await MongoDatabase.insert(user);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Processing Data')),
                       );

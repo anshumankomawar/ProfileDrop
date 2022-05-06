@@ -23,7 +23,7 @@ class User {
   Map<String, dynamic> toMap() {
     return {
       '_id': id,
-      'location': location,
+      'location': location.toMap(),
       // 'username': username,
       'firstName': firstName,
       'lastName': lastName,
