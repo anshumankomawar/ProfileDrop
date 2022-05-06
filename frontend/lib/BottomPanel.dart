@@ -1,3 +1,6 @@
+
+import 'package:frontend/Profile.dart';
+import 'package:frontend/main.dart';
 import 'package:frontend/Events/EventScroller.dart';
 import 'package:frontend/Database.dart';
 import 'package:frontend/models/Location.dart';
@@ -5,6 +8,8 @@ import 'package:frontend/models/User.dart';
 // import 'package:mongo_dart/mongo_dart.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter/material.dart';
+
+import 'Profile.dart';
 
 class BottomPanel extends StatefulWidget {
   const BottomPanel({Key? key}) : super(key: key);
