@@ -1,6 +1,9 @@
+import 'package:frontend/Profile.dart';
 import 'package:frontend/main.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter/material.dart';
+
+import 'Profile.dart';
 
 class BottomPanel extends StatefulWidget {
   const BottomPanel({Key? key}) : super(key: key);
