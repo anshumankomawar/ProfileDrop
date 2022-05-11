@@ -12,6 +12,12 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  final firstName = TextEditingController();
+  final lastName = TextEditingController();
+  final phoneNumber = TextEditingController();
+  final location = TextEditingController();
+  final biography = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,13 +47,13 @@ class _ProfileState extends State<Profile> {
                       User user = User(
                         id: ObjectId(),
                         location: Location(id: ObjectId(), type: "Point", coordinates: [-137, 40]),
-                        firstName: "test",
-                        lastName: "test",
-                        phoneNumber: "sdf"
+                        firstName: firstName.text,
+                        lastName: lastName.text,
+                        phoneNumber: phoneNumber.text
                       );
                       await MongoDatabase.insert(user);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
+                        const SnackBar(content: Text('Successfully saved user')),
                       );
                     }
                   },
@@ -87,6 +93,7 @@ class _ProfileState extends State<Profile> {
                   child: Column(
                     children: [
                       TextFormField(
+                        controller: firstName,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter first name';
@@ -103,6 +110,7 @@ class _ProfileState extends State<Profile> {
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10.0)),
                       TextFormField(
+                        controller: lastName,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter last name';
@@ -149,6 +157,7 @@ class _ProfileState extends State<Profile> {
               children: [
                 Flexible(
                   child: TextFormField(
+                    controller: biography,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter a bio';
