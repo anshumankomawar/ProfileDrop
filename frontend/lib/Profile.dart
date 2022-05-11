@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/Database.dart';
+import 'package:frontend/models/Location.dart';
+import 'package:frontend/models/User.dart';
+import 'package:mongo_dart/mongo_dart.dart' show ObjectId;
 
 class Profile extends StatefulWidget {
   const Profile({ Key? key }) : super(key: key);
@@ -8,6 +12,12 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  final firstName = TextEditingController();
+  final lastName = TextEditingController();
+  final phoneNumber = TextEditingController();
+  final location = TextEditingController();
+  final biography = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,20 +40,20 @@ class _ProfileState extends State<Profile> {
                 ),
                 GestureDetector(
                   child: const Icon(Icons.save, size: 32),
-                  onTap: () {
-                    // const snackBar = SnackBar(
-                    //   content: Text('Successfully saved user information'),
-                    // );
-
-                    // // Find the ScaffoldMessenger in the widget tree
-                    // // and use it to show a SnackBar.
-                    // Navigator.pop(context);
-                    // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  onTap: () async {
                     if (_formKey.currentState!.validate()) {
                       // If the form is valid, display a snackbar. In the real world,
                       // you'd often call a server or save the information in a database.
+                      User user = User(
+                        id: ObjectId(),
+                        location: Location(id: ObjectId(), type: "Point", coordinates: [-137, 40]),
+                        firstName: firstName.text,
+                        lastName: lastName.text,
+                        phoneNumber: phoneNumber.text
+                      );
+                      await MongoDatabase.insert(user);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
+                        const SnackBar(content: Text('Successfully saved user')),
                       );
                     }
                   },
@@ -83,6 +93,7 @@ class _ProfileState extends State<Profile> {
                   child: Column(
                     children: [
                       TextFormField(
+                        controller: firstName,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter first name';
@@ -99,6 +110,7 @@ class _ProfileState extends State<Profile> {
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10.0)),
                       TextFormField(
+                        controller: lastName,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter last name';
@@ -145,6 +157,7 @@ class _ProfileState extends State<Profile> {
               children: [
                 Flexible(
                   child: TextFormField(
+                    controller: biography,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter a bio';
