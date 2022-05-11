@@ -25,16 +25,12 @@ class _MapboxViewState extends State<MapboxView> {
         padding: const EdgeInsets.all(10),
       ); },
       width: 30.0,
-      height: 30.0,)];
+      height: 30.0,)
+  ];
+
+
   @override
   Widget build(BuildContext context) {
-    MongoDatabase.getDocuments();
-
-    userLocationOptions = UserLocationOptions(
-      context: context,
-      mapController: mapController,
-      markers: markers,
-    );
     return FlutterMap(
         options: MapOptions(
           center: latlng.LatLng(35.2828, -120.6596),
@@ -52,7 +48,11 @@ class _MapboxViewState extends State<MapboxView> {
               }
           ),
           MarkerLayerOptions(markers: markers),
-          userLocationOptions,
+          // UserLocationOptions(
+          //     context: context,
+          //     mapController: mapController,
+          //     markers: markers,
+          // )
         ],
         mapController: mapController,
     );

@@ -148,7 +148,7 @@ class _BottomPanelState extends State<BottomPanel> {
                   Flexible(
                     flex: 3,
                     child: FutureBuilder(
-                  future: MongoDatabase.getUser("627473ddc4e28c74aa3a0c2b"),
+                  future: MongoDatabase.getUser("627b1c2dbfecdbb889081055"),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Show loading indicator
@@ -163,6 +163,7 @@ class _BottomPanelState extends State<BottomPanel> {
                     } else {
                       // Return Listview with documents data
                       print(snapshot.data);
+                      print("SNAPSHOT DATA: ");
                       return NearbyUserList(user: snapshot.data as User);
                     }
                   }

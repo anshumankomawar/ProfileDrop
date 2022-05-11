@@ -13,8 +13,9 @@ class NearbyUserList extends StatefulWidget {
 class _NearbyUserListState extends State<NearbyUserList> {
   @override
   Widget build(BuildContext context) {
+    print("BUILDING");
     return ListView.builder(
-      itemCount: 10,
+      itemCount: 1,
       itemBuilder: (context, index) {
         return Card(
           child: Column(
