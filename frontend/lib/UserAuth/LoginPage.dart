@@ -17,14 +17,25 @@ class _LoginPageState extends State<LoginPage> {
       child: Center(
           child: Column(children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(0, 64, 0, 16),
-          child: Text(
-            "Login Page",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
+          padding: const EdgeInsets.fromLTRB(16, 64, 125, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                child: const Icon(Icons.arrow_back_rounded, size: 24),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              Text(
+                "Login Page",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ),
         Padding(
@@ -42,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-            )),
+                )),
           ),
         ),
         Padding(
@@ -60,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-            )),
+                )),
           ),
         ),
         TextButton(
