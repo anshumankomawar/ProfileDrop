@@ -4,10 +4,10 @@ import 'package:frontend/MapboxView.dart';
 import 'package:frontend/UserAuth/LoginPage.dart';
 import 'package:frontend/UserAuth/RegistrationPage.dart';
 
-
 import 'BottomPanel.dart';
 import 'Profile.dart';
 import 'models/User.dart';
+import 'SplashPanel.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,15 +21,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      initialRoute: '/registration',
+      initialRoute: '/splash',
       routes: {
-      // When navigating to the "/" route, build the FirstScreen widget.
-      '/': (context) => const  MyHomePage (),
-      // When navigating to the "/second" route, build the SecondScreen widget.
-      '/profile': (context) => const Profile(),
-      '/registration': (context) => const RegistrationPage(),
-      '/login': (context) => const LoginPage(),
-    },
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/': (context) => const MyHomePage(),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        '/profile': (context) => const Profile(),
+        '/registration': (context) => const RegistrationPage(),
+        '/login': (context) => const LoginPage(),
+        '/splash': (context) => const SplashPanel(),
+      },
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -54,7 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
             // Show loading indicator
             return Container();
           } else {
-
             if (snapshot.hasError) {
               // Return error
               print("main");
@@ -64,8 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
               print(snapshot.data);
               return Scaffold(
                 body: Center(
-                    child:
-                        Stack(children: [MapboxView(), BottomPanel()])),
+                    child: Stack(children: [MapboxView(), BottomPanel()])),
               );
             }
           }
