@@ -14,40 +14,9 @@ class _NearbyUserListState extends State<NearbyUserList> {
   @override
   Widget build(BuildContext context) {
     print("BUILDING");
-    return ListView.builder(
-      itemCount: 1,
-      itemBuilder: (context, index) {
-        return Card(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.album),
-                title: Text("first" + " " + "last"),
-                subtitle: Text("phone"),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  TextButton(
-                    child: const Text('CONNECT'),
-                    onPressed: () {/* ... */},
-                  ),
-                  const SizedBox(width: 8),
-                  TextButton(
-                    child: const Text('MORE'),
-                    onPressed: () {/* ... */},
-                  ),
-                  const SizedBox(width: 8),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
+
     return FutureBuilder(
-        future: MongoDatabase.getNearbyUsers(widget.user.location.coordinates),
+        future: MongoDatabase.getNearbyUsers(widget.user),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // Show loading indicator
@@ -60,7 +29,38 @@ class _NearbyUserListState extends State<NearbyUserList> {
               return Container();
             } else {
               // Return Listview with documents data
-
+              return ListView.builder(
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          leading: Icon(Icons.album),
+                          title: Text(widget.user.firstName + " " + widget.user.lastName),
+                          subtitle: Text(widget.user.phoneNumber),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            TextButton(
+                              child: const Text('CONNECT'),
+                              onPressed: () {/* ... */},
+                            ),
+                            const SizedBox(width: 8),
+                            TextButton(
+                              child: const Text('MORE'),
+                              onPressed: () {/* ... */},
+                            ),
+                            const SizedBox(width: 8),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
             }
           }
         });
