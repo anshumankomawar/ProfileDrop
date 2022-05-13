@@ -19,22 +19,42 @@ class MapboxView extends StatefulWidget {
 class _MapboxViewState extends State<MapboxView> {
   MapController mapController = MapController();
   late UserLocationOptions userLocationOptions;
-  List<Marker> markers = [
-    Marker(
-      point: latlng.LatLng(35.2828, -120.6596),
-      builder: (BuildContext context) { return Container(
-        decoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
-        width: 12,
-        height: 12,
-        padding: const EdgeInsets.all(10),
-      ); },
-      width: 30.0,
-      height: 30.0,)
-  ];
-
 
   @override
   Widget build(BuildContext context) {
+    print(widget.user.location.coordinates[0].toString() +  widget.user.location.coordinates[1].toString());
+    List<Marker> markers = [
+      Marker(
+        point: latlng.LatLng(widget.user.location.coordinates[1], widget.user.location.coordinates[0]),
+        builder: (BuildContext context) { return Container(
+          decoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
+          width: 12,
+          height: 12,
+          padding: const EdgeInsets.all(10),
+        ); },
+        width: 30.0,
+        height: 30.0,
+      ),
+    ];
+
+    // print(widget.user.location)
+    for (int i = 0; i < widget.nearbyUsers.length; i++) {
+      markers.add(
+          Marker(
+            point:
+            latlng.LatLng(widget.nearbyUsers[i].location.coordinates[1],
+                widget.nearbyUsers[i].location.coordinates[0]),
+            builder: (BuildContext context) { return Container(
+              decoration: BoxDecoration(color: Colors.green,
+                  shape: BoxShape.circle),
+              width: 12,
+              height: 12,
+              padding: const EdgeInsets.all(10),
+            ); },
+            width: 30.0,
+            height: 30.0,));
+    }
+
     return FlutterMap(
         options: MapOptions(
           center: latlng.LatLng(35.2828, -120.6596),

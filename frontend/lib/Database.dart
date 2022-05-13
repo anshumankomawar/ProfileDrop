@@ -10,7 +10,7 @@ class MongoDatabase {
     db = await Db.create(MONGO_CONN_URL);
     await db.open();
     userCollection = await db.collection(USER_COLLECTION);
-    User user = await getUser("627b1c2dbfecdbb889081055");
+    User user = await getUser("627dc87c37b37ad09147cda2");
     return [user] +  await getNearbyUsers(user);
   }
 
@@ -47,7 +47,7 @@ class MongoDatabase {
 
     result.sort((a,b) => (a.location.distanceTo(user.location)).compareTo(b.location.distanceTo(user.location)));
     if(result.length == 1) return [];
-    return result.sublist(1, 15);
+    return result.sublist(1, result.length > 15 ? 15: result.length);
   }
 
   static insert(User user) async {
