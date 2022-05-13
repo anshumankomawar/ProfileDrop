@@ -1,3 +1,4 @@
+import 'package:frontend/models/Location.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:frontend/Constants.dart';
 import 'package:frontend/models/User.dart';
@@ -34,9 +35,9 @@ class MongoDatabase {
     return result;
   }
 
-  static Future<List> getNearbyUsers(List<double> coords) async {
+  static Future<List> getNearbyUsers(User user) async {
     await db.createIndex('users', keys: {'location': '2dsphere'});
-    var _loc = {'type': 'Point', 'coordinates': coords};
+    var _loc = {'type': 'Point', 'coordinates': user.location.coordinates};
     var result = [];
     await userCollection
         .find(where.near("location", _loc, 2000))
@@ -44,6 +45,12 @@ class MongoDatabase {
       print(data);
       result.add(data);
     });
+
+    result.sort((a,b) => (a.location.distanceTo(user.location)).compareTo(b.location.distanceTo(user.location)));
+    if(result.length > 15){
+      return result.sublist(15);
+    }
+
     return result;
   }
 
