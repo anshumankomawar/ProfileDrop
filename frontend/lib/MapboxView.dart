@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:frontend/Database.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 
+import 'models/User.dart';
+
 class MapboxView extends StatefulWidget {
-  const MapboxView({Key? key}) : super(key: key);
+  final User user;
+  final List<User> nearbyUsers;
+  const MapboxView({required this.user, required this.nearbyUsers, Key? key}) : super(key: key);
 
 
   @override
