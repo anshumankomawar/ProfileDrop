@@ -12,7 +12,9 @@ import 'package:flutter/material.dart';
 import 'Profile.dart';
 
 class BottomPanel extends StatefulWidget {
-  const BottomPanel({Key? key}) : super(key: key);
+  final User user;
+  final List<User> nearbyUsers;
+  const BottomPanel({required this.user, required this.nearbyUsers, Key? key}) : super(key: key);
 
   @override
   _BottomPanelState createState() => _BottomPanelState();
@@ -34,7 +36,7 @@ class _BottomPanelState extends State<BottomPanel> {
       parallaxEnabled: true,
       parallaxOffset: .5,
       body: Container(),
-      panelBuilder: (sc) => _panel(sc, isSelected, dropdownValue),
+      panelBuilder: (sc) => _panel(widget.user, sc, isSelected, dropdownValue),
       borderRadius: const BorderRadius.only(
           topLeft: const Radius.circular(18.0),
           topRight: const Radius.circular(18.0)),
@@ -64,7 +66,7 @@ class _BottomPanelState extends State<BottomPanel> {
     );
   }
 
-  Widget _panel(
+  Widget _panel(User user,
       ScrollController sc, List<bool> isSelected, List<String> dropdownValue) {
     List<String> _states = ["Active", "Inactive", "Friends", "Privacy"];
     List<MaterialColor> _colors = [
@@ -102,9 +104,9 @@ class _BottomPanelState extends State<BottomPanel> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              "Richard Yu",
-                              style: TextStyle(
+                            Text(
+                              user.firstName + " " + user.lastName,
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
                               ),
@@ -147,27 +149,7 @@ class _BottomPanelState extends State<BottomPanel> {
                   ),
                   Flexible(
                     flex: 3,
-                    child: FutureBuilder(
-                  future: MongoDatabase.getUser("627b1c2dbfecdbb889081055"),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    // Show loading indicator
-                    return Container();
-                  } else {
-
-                    if (snapshot.hasError) {
-                      // Return error
-                      print("bottompanel");
-                      print(snapshot.error);
-                      return Container();
-                    } else {
-                      // Return Listview with documents data
-                      print(snapshot.data);
-                      print("SNAPSHOT DATA: ");
-                      return NearbyUserList(user: snapshot.data as User);
-                    }
-                  }
-                })
+                    child: NearbyUserList(nearbyUsers: widget.nearbyUsers)
                   ),
                   Flexible(flex: 2, child: EventScroller())
                 ],

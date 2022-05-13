@@ -3,8 +3,8 @@ import 'package:frontend/Database.dart';
 import 'models/User.dart';
 
 class NearbyUserList extends StatefulWidget {
-  final User user;
-  const NearbyUserList({required this.user, Key? key}) : super(key: key);
+  final List<User> nearbyUsers;
+  const NearbyUserList({required this.nearbyUsers, Key? key}) : super(key: key);
 
   @override
   State<NearbyUserList> createState() => _NearbyUserListState();
@@ -13,56 +13,38 @@ class NearbyUserList extends StatefulWidget {
 class _NearbyUserListState extends State<NearbyUserList> {
   @override
   Widget build(BuildContext context) {
-    print("BUILDING");
 
-    return FutureBuilder(
-        future: MongoDatabase.getNearbyUsers(widget.user),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // Show loading indicator
-            return Container();
-          } else {
-
-            if (snapshot.hasError) {
-              // Return error
-              print("ERHERE");
-              return Container();
-            } else {
-              // Return Listview with documents data
-              return ListView.builder(
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        ListTile(
-                          leading: Icon(Icons.album),
-                          title: Text(widget.user.firstName + " " + widget.user.lastName),
-                          subtitle: Text(widget.user.phoneNumber),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            TextButton(
-                              child: const Text('CONNECT'),
-                              onPressed: () {/* ... */},
-                            ),
-                            const SizedBox(width: 8),
-                            TextButton(
-                              child: const Text('MORE'),
-                              onPressed: () {/* ... */},
-                            ),
-                            const SizedBox(width: 8),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            }
-          }
-        });
+    return ListView.builder(
+      itemCount: widget.nearbyUsers.length,
+      itemBuilder: (context, idx) {
+        return Card(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.album),
+                title: Text((widget.nearbyUsers[idx]).firstName + " " + (widget.nearbyUsers[idx]).lastName),
+                subtitle: Text((widget.nearbyUsers[idx]).phoneNumber),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  TextButton(
+                    child: const Text('CONNECT'),
+                    onPressed: () {/* ... */},
+                  ),
+                  const SizedBox(width: 8),
+                  TextButton(
+                    child: const Text('MORE'),
+                    onPressed: () {/* ... */},
+                  ),
+                  const SizedBox(width: 8),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

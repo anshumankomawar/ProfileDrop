@@ -46,10 +46,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late Future<User> user;
+  late List<User > nearbyUsers;
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: MongoDatabase.connect(),
+      future: MongoDatabase.connect(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // Show loading indicator
@@ -57,15 +60,31 @@ class _MyHomePageState extends State<MyHomePage> {
           } else {
             if (snapshot.hasError) {
               // Return error
-              print("main");
+              print("error" + snapshot.error.toString());
               return Container();
             } else {
               // Return Listview with documents data
-              print(snapshot.data);
-              return Scaffold(
-                body: Center(
-                    child: Stack(children: [MapboxView(), BottomPanel()])),
-              );
+              if(snapshot.hasData) {
+                User user = (snapshot.data! as List)[0];
+                List<User> nearbyUsers = (snapshot.data! as List<User>).sublist(1);
+                return Scaffold(
+                  body: Center(
+                      child:
+                      Stack(
+                          children: [
+                            MapboxView(
+                                user: user,
+                                nearbyUsers: nearbyUsers
+                            ),
+                            BottomPanel(
+                                user: user,
+                                nearbyUsers: nearbyUsers
+                            )
+                          ]
+                      )
+                  ),
+                );
+              } return Container();
             }
           }
         });
