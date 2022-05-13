@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Database.dart';
 import 'package:frontend/MapboxView.dart';
+import 'package:frontend/UserAuth/LoginPage.dart';
+import 'package:frontend/UserAuth/RegistrationPage.dart';
 
 
 import 'BottomPanel.dart';
@@ -19,12 +21,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      initialRoute: '/',
+      initialRoute: '/registration',
       routes: {
       // When navigating to the "/" route, build the FirstScreen widget.
       '/': (context) => const  MyHomePage (),
       // When navigating to the "/second" route, build the SecondScreen widget.
       '/profile': (context) => const Profile(),
+      '/registration': (context) => const RegistrationPage(),
+      '/login': (context) => const LoginPage(),
     },
       theme: ThemeData(
         primarySwatch: Colors.blue,
