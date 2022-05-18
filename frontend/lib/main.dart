@@ -3,7 +3,6 @@ import 'package:frontend/Database.dart';
 import 'package:frontend/MapboxView.dart';
 import 'package:frontend/UserAuth/LoginPage.dart';
 import 'package:frontend/UserAuth/RegistrationPage.dart';
-
 import 'BottomPanel.dart';
 import 'Profile.dart';
 import 'models/User.dart';

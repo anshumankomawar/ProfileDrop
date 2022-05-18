@@ -76,8 +76,6 @@ class _BottomPanelState extends State<BottomPanel> {
       Colors.grey
     ];
 
-    // users.sort((a,b) => (a.location.distanceTo(currentUser.location)).compareTo(b.location.distanceTo(currentUser.location)));
-
     return MediaQuery.removePadding(
         context: context,
         removeTop: true,
@@ -149,7 +147,7 @@ class _BottomPanelState extends State<BottomPanel> {
                   ),
                   Flexible(
                     flex: 3,
-                    child: NearbyUserList(nearbyUsers: widget.nearbyUsers)
+                    child: NearbyUserList(user: widget.user, nearbyUsers: widget.nearbyUsers)
                   ),
                   Flexible(flex: 2, child: EventScroller())
                 ],
