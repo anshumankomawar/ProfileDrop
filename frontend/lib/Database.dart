@@ -51,6 +51,9 @@ class MongoDatabase {
   }
 
   static insert(User user) async {
+    db = await Db.create(MONGO_CONN_URL);
+    await db.open();
+    userCollection = db.collection(USER_COLLECTION);
     await userCollection.insertAll([user.toMap()]);
   }
 
@@ -67,4 +70,6 @@ class MongoDatabase {
   static delete(User user) async {
     await userCollection.remove(where.id(user.id));
   }
+
+  static test() {}
 }

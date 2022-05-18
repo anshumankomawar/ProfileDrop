@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/Database.dart';
+import 'package:frontend/models/Location.dart';
+import 'package:frontend/models/User.dart';
+import 'package:mongo_dart/mongo_dart.dart' show ObjectId;
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);
@@ -45,7 +49,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-            )),
+                )),
           ),
         ),
         Padding(
@@ -99,7 +103,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-            )),
+                )),
           ),
         ),
         Padding(
@@ -124,7 +128,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
           style: TextButton.styleFrom(
             textStyle: const TextStyle(fontSize: 32),
           ),
-          onPressed: () {
+          onPressed: () async {
+            print('entedf');
+            User user = User(
+                id: ObjectId(),
+                location: Location(
+                    id: ObjectId(), type: "Point", coordinates: [-120.6595, 35.2826]),
+                firstName: firstName.text,
+                lastName: lastName.text,
+                phoneNumber: phoneNumber.text);
+
+            await MongoDatabase.insert(user);
             Navigator.pushNamed(context, '/');
           },
           child: const Text('Register'),
@@ -133,8 +147,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
           style: TextButton.styleFrom(
             textStyle: const TextStyle(fontSize: 16),
           ),
-          onPressed: () {
-            Navigator.pushNamed(context, '/login');
+          onPressed: () async {
+            // Navigator.pushNamed(context, '/login');
           },
           child: const Text('Have an account? Login'),
         )
