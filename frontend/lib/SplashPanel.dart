@@ -31,7 +31,7 @@ class _SplashPanelState extends State<SplashPanel> {
                         side: BorderSide(color: Colors.lightBlueAccent)),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/registration');
+                    Navigator.popAndPushNamed(context, '/registration');
                   },
                   child: const Text('Sign up'),
                 ),
@@ -49,7 +49,7 @@ class _SplashPanelState extends State<SplashPanel> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/login');
+                    Navigator.popAndPushNamed(context, '/login');
                   },
                   child: const Text('Log in'),
                 ),

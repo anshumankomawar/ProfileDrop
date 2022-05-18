@@ -17,16 +17,10 @@ class _LoginPageState extends State<LoginPage> {
       child: Center(
           child: Column(children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 64, 125, 0),
+          padding: const EdgeInsets.fromLTRB(0, 64, 0, 0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GestureDetector(
-                child: const Icon(Icons.arrow_back_rounded, size: 24),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
               Text(
                 "Login Page",
                 textAlign: TextAlign.center,
@@ -79,9 +73,20 @@ class _LoginPageState extends State<LoginPage> {
             textStyle: const TextStyle(fontSize: 32),
           ),
           onPressed: () {
-            Navigator.pushNamed(context, '/');
+            Navigator.popAndPushNamed(context, '/');
           },
           child: const Text('Login'),
+        ),
+        GestureDetector(
+          child: const Text(
+            "Don't have an account? Register here",
+            style: TextStyle(
+              color: Colors.blue
+            ),
+          ),
+          onTap: () {
+            Navigator.popAndPushNamed(context, "/registration");
+          },
         ),
       ])),
     );
