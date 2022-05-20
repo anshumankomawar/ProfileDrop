@@ -28,8 +28,12 @@ class _OtherProfileState extends State<OtherProfile> {
                       Navigator.pop(context);
                     },
                   ),
-                  const Text(
-                    "OtherProfile",
+                  // Text(
+                  //   widget.user.username,
+                  //   textScaleFactor: 1.5,
+                  // ),
+                  Text(
+                    "chilledlemon",
                     textScaleFactor: 1.5,
                   ),
                   GestureDetector(
@@ -57,96 +61,128 @@ class _OtherProfileState extends State<OtherProfile> {
   final _formKey = GlobalKey<FormState>();
 
   Widget _otherprofileFields(BuildContext context) {
+    Column careerinfo = getCareerInfo(widget.user);
+    Column populatedFields = buildSubDescription(widget.user);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Form(
         key: _formKey,
         child: Column(
           children: <Widget>[
-            Row(
-              children: [
-                Container(
-                  width: 150,
-                  height: 150,
-                  child: const Icon(Icons.person_outline, size: 100),
-                  decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(150),
-                      border: Border.all(color: Colors.black)
-                  ),
-                ),
-                const Padding(padding: EdgeInsets.only(right: 30.0)),
-                Expanded(
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        enabled: false,
-                        // controller: firstName,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter first name';
-                          }
-                          return null;
-                        },
-                        initialValue: widget.user.firstName,
+            Container(
+              width: 300,
+              height: 300,
+              child: Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                color: Color(0xFFebebeb),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 35
+                    ),
+                    Container(
+                      width: 150,
+                      height: 150,
+                      child: const Icon(Icons.person_outline, size: 100),
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(150),
+                          border: Border.all(color: Colors.black)
                       ),
-                      const Padding(padding: EdgeInsets.only(top: 10.0)),
-                      TextFormField(
-                        enabled: false,
-                        // controller: lastName,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter last name';
-                          }
-                          return null;
-                        },
-                        initialValue: widget.user.lastName,
-                      ),
-                    ],
-                  ),
+                    ),
+                    Container(
+                        height: 5
+                    ),
+                    Text(widget.user.firstName + " " + widget.user.lastName),
+                    careerinfo
+                  ],
                 ),
-              ],
+              )
             ),
-            const Padding(padding: EdgeInsets.only(top: 10.0)),
-            Row(
-              children: [
-                Flexible(
-                  child: TextFormField(
-                    enabled: false,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please select a location';
-                      }
-                      return null;
-                    },
-                    initialValue: widget.user.phoneNumber,
-                  ),
+            Container(
+              width: 300,
+              height: populatedFields.children.length*20 + 20,
+              child: Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                color: Color(0xFFebebeb),
+                child: Column(
+                  children: [
+                    Container(height: 10),
+                    Container(child: populatedFields)
+                  ],
                 ),
-              ],
+              )
             ),
-            const Padding(padding: EdgeInsets.only(top: 10.0)),
-            Row(
-              children: [
-                Flexible(
-                  child: TextFormField(
-                    enabled: false,
-                    // controller: biography,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a bio';
-                      }
-                      return null;
-                    },
-                    initialValue: widget.user.phoneNumber,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: 5,
-                  ),
-                ),
-              ],
-            )
           ],
         ),
       ),
     );
+  }
+
+  Column getCareerInfo(User user){
+    List<Text> entries = [];
+    entries.add(Text("CalPoly: Computer Science"));
+    entries.add(Text("Amazon: Janitor"));
+    // if (user.university != ""){
+    //   if (user.major != ""){
+    //     entries.add(Text(widget.user.university + ": " + widget.user.major));
+    //   }
+    //   else{
+    //     entries.add(Text("College: " + widget.user.university));
+    //   }
+    // }
+    // else if (user.major != ""){
+    //   entries.add(Text("Major: " + widget.user.major));
+    // }
+    //
+    // if (user.company != ""){
+    //   if (user.job != ""){
+    //     entries.add(Text(widget.user.company + ": " + widget.user.job));
+    //   }
+    //   else{
+    //     entries.add(Text("Company: " + widget.user.company));
+    //   }
+    // }
+    // else if (user.job != ""){
+    //   entries.add(Text("Title: " + widget.user.job));
+    // }
+    //
+    Column col = Column(children: entries);
+    return col;
+  }
+
+  Column buildSubDescription(User user){
+    List<Row> entries = [];
+
+    entries.add(Row(
+      children: [
+        Flexible(
+          child: Text("widget.user.phoneNumber"),
+        ),
+        const Padding(padding: EdgeInsets.only(top: 10.0)),
+      ],
+    ));
+    entries.add(Row(
+      children: [
+        Flexible(
+          child: Text("widget.user.bio"),
+        ),
+        const Padding(padding: EdgeInsets.only(top: 10.0)),
+      ],
+    ));
+
+    // if (user.phoneNumber != ""){
+    //   entries.add(Row(
+    //     children: [
+    //       Flexible(
+    //         child: Text(widget.user.phoneNumber),
+    //       ),
+    //       const Padding(padding: EdgeInsets.only(top: 10.0)),
+    //     ],
+    //   ));
+    // }
+    Column col = Column(children: entries);
+    return col;
   }
 }
