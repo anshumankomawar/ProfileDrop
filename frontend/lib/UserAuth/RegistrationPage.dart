@@ -148,7 +148,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             textStyle: const TextStyle(fontSize: 16),
           ),
           onPressed: () async {
-            // Navigator.pushNamed(context, '/login');
+            Navigator.popAndPushNamed(context, '/login');
           },
           child: const Text('Have an account? Login'),
         )
