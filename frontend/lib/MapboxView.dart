@@ -23,19 +23,7 @@ class _MapboxViewState extends State<MapboxView> {
   @override
   Widget build(BuildContext context) {
     print(widget.user.location.coordinates[0].toString() +  widget.user.location.coordinates[1].toString());
-    List<Marker> markers = [
-      Marker(
-        point: latlng.LatLng(widget.user.location.coordinates[1], widget.user.location.coordinates[0]),
-        builder: (BuildContext context) { return Container(
-          decoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
-          width: 12,
-          height: 12,
-          padding: const EdgeInsets.all(10),
-        ); },
-        width: 30.0,
-        height: 30.0,
-      ),
-    ];
+    List<Marker> markers = [];
 
     // print(widget.user.location)
     for (int i = 0; i < widget.nearbyUsers.length; i++) {
@@ -62,6 +50,18 @@ class _MapboxViewState extends State<MapboxView> {
               ),
             )));
     }
+
+    markers.add(Marker(
+      point: latlng.LatLng(widget.user.location.coordinates[1], widget.user.location.coordinates[0]),
+      builder: (BuildContext context) { return Container(
+        decoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
+        width: 12,
+        height: 12,
+        padding: const EdgeInsets.all(10),
+      ); },
+      width: 30.0,
+      height: 30.0,
+    ));
 
     return FlutterMap(
         options: MapOptions(
