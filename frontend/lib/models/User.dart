@@ -3,39 +3,78 @@ import 'package:mongo_dart/mongo_dart.dart';
 import 'Location.dart';
 
 class User {
-  final ObjectId id;
   final Location location;
-  // final String username;
+  final String username;
+  final String password;
   final String firstName;
   final String lastName;
   final String phoneNumber;
+  final String bio;
+  final List<String> friends;
+  final int preferredStatus;
+  final String PFP; // <optional>
+  final String college; // <optional>
+  final String major; // <optional>
+  final String job; // <optional>
+  final String song; // <optional> -> Spotify API?
+
+  /* ---- Socials ---- */
+  final Map<String, String> socials;
+
 
 
   const User({
-    required this.id,
     required this.location,
-    // required this.username,
+    required this.username,
+    required this.password,
     required this.firstName,
     required this.lastName,
-    required this.phoneNumber
+    required this.phoneNumber,
+    required this.bio,
+    required this.friends,
+    required this.preferredStatus,
+    this.PFP = "", // <optional>
+    this.college = "", // <optional>
+    this.major = "", // <optional>
+    this.job = "", // <optional>
+    this.song = "", // <optional>
+    required this.socials,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      '_id': id,
       'location': location.toMap(),
-      // 'username': username,
+      'username': username,
+      'password' : password,
       'firstName': firstName,
       'lastName': lastName,
-      'phoneNumber' : phoneNumber
+      'phoneNumber' : phoneNumber,
+      'bio' : bio,
+      'friends' : friends,
+      'preferredStatus' : preferredStatus,
+      'PFP' : PFP,
+      'college' : college,
+      'major' : major,
+      'job' : job,
+      'song' : song,
+      'socials' : socials,
     };
   }
 
   User.fromMap(Map<String, dynamic> map)
-      : id = map['_id'],
-        location = Location.fromMap(map['location']),
-        // username = map['username'],
+      : location = Location.fromMap(map['location']),
+        username = map['username'],
+        password = map['password'],
         firstName = map['firstName'],
         lastName = map['lastName'],
-        phoneNumber = map["phoneNumber"];
+        phoneNumber = map["phoneNumber"],
+        bio = map['bio'],
+        friends = map['friends'],
+        preferredStatus = map['preferredStatus'],
+        PFP = map['PFP'],
+        college = map['college'],
+        major = map['major'],
+        job = map['job'],
+        song = map['song'],
+        socials = map['socials'];
 }
