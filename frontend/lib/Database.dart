@@ -6,16 +6,22 @@ import 'package:frontend/models/User.dart';
 class MongoDatabase {
   static var db, userCollection;
 
-  static Future<List<User>> connect() async {
+  static connect() async {
     db = await Db.create(MONGO_CONN_URL);
     await db.open();
     userCollection = await db.collection(USER_COLLECTION);
-    User user = await getUser("627dc87c37b37ad09147cda2");
-    return [user] +  await getNearbyUsers(user);
+    // User user = await getUser("627dc87c37b37ad09147cda2");
+    // return [user] +  await getNearbyUsers(user);
   }
 
-  static Future<User> getUser(String userId) async{
-    var result = await userCollection.findOne(where.id(ObjectId.parse(userId)));
+  static Future<User?> getUser(String username) async{
+    var result = await userCollection.findOne(where.eq("username",username));
+    if (result == null) {
+      return null;
+    }
+    print("Result: ");
+    print(result);
+    // print((result as User).password);
     return User.fromMap(result);
   }
 
@@ -57,19 +63,19 @@ class MongoDatabase {
     await userCollection.insertAll([user.toMap()]);
   }
 
-  static update(User user) async {
-    var u = await userCollection.findOne({"_id": user.id});
-    u["location"] = user.location;
-    // u["username"] = user.username;
-    u["firstName"] = user.firstName;
-    u["lastName"] = user.lastName;
-    u["phoneNumber"] = user.phoneNumber;
-    await userCollection.save(u);
-  }
-
-  static delete(User user) async {
-    await userCollection.remove(where.id(user.id));
-  }
+  // static update(User user) async {
+  //   var u = await userCollection.findOne({"_id": user.id});
+  //   u["location"] = user.location;
+  //   // u["username"] = user.username;
+  //   u["firstName"] = user.firstName;
+  //   u["lastName"] = user.lastName;
+  //   u["phoneNumber"] = user.phoneNumber;
+  //   await userCollection.save(u);
+  // }
+  //
+  // static delete(User user) async {
+  //   await userCollection.remove(where.id(user.id));
+  // }
 
   static test() {}
 }

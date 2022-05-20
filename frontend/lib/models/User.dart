@@ -22,7 +22,6 @@ class User {
   final Map<String, String> socials;
 
 
-
   const User({
     required this.location,
     required this.username,
@@ -69,12 +68,12 @@ class User {
         lastName = map['lastName'],
         phoneNumber = map["phoneNumber"],
         bio = map['bio'],
-        friends = map['friends'],
+        friends = map['friends'].cast<String>(),
         preferredStatus = map['preferredStatus'],
         PFP = map['PFP'],
         college = map['college'],
         major = map['major'],
         job = map['job'],
         song = map['song'],
-        socials = map['socials'];
+        socials = map['socials'].cast<String, String>();
 }

@@ -130,15 +130,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           onPressed: () async {
             print('entedf');
-            User user = User(
-                id: ObjectId(),
-                location: Location(
-                    id: ObjectId(), type: "Point", coordinates: [-120.6595, 35.2826]),
-                firstName: firstName.text,
-                lastName: lastName.text,
-                phoneNumber: phoneNumber.text);
+            // User user = User(
+            //     id: ObjectId(),
+            //     location: Location(
+            //         id: ObjectId(), type: "Point", coordinates: [-120.6595, 35.2826]),
+            //     firstName: firstName.text,
+            //     lastName: lastName.text,
+            //     phoneNumber: phoneNumber.text);
 
-            await MongoDatabase.insert(user);
+            // await MongoDatabase.insert(user);
             Navigator.pushNamed(context, '/');
           },
           child: const Text('Register'),

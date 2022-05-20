@@ -37,6 +37,11 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// class HomePageArguments {
+//   final User user;
+//   HomePageArguments(this.user);
+// }
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
@@ -46,26 +51,27 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<User> user;
-  late List<User > nearbyUsers;
+  late List<User> nearbyUsers = [];
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: MongoDatabase.connect(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // Show loading indicator
-            return Container();
-          } else {
-            if (snapshot.hasError) {
-              // Return error
-              print("error" + snapshot.error.toString());
+    final args = ModalRoute.of(context)!.settings.arguments;
+    if (args == null) {
+      return Container();
+    } else {
+      User user = args as User;
+      return FutureBuilder(
+          future: MongoDatabase.getNearbyUsers(user),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // Show loading indicator
               return Container();
             } else {
-              // Return Listview with documents data
-              if(snapshot.hasData) {
-                User user = (snapshot.data! as List)[0];
-                List<User> nearbyUsers = (snapshot.data! as List<User>).sublist(1);
+              if (snapshot.hasError) {
+                // Return error
+                print("error" + snapshot.error.toString());
+                return Container();
+              } else {
                 return Scaffold(
                   body: Center(
                       child:
@@ -73,19 +79,21 @@ class _MyHomePageState extends State<MyHomePage> {
                           children: [
                             MapboxView(
                                 user: user,
-                                nearbyUsers: nearbyUsers
+                                nearbyUsers: snapshot.data as List<User>
                             ),
                             BottomPanel(
                                 user: user,
-                                nearbyUsers: nearbyUsers
+                                nearbyUsers: snapshot.data as List<User>
                             )
                           ]
                       )
                   ),
                 );
-              } return Container();
+              }
             }
           }
-        });
+      );
+
+    }
   }
 }

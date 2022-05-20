@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/Database.dart';
+import 'package:frontend/main.dart';
 import 'package:frontend/models/Location.dart';
 import 'package:frontend/models/User.dart';
 import 'package:mongo_dart/mongo_dart.dart' show ObjectId;
@@ -19,7 +20,7 @@ class _SplashPanelState extends State<SplashPanel> {
   bool _passwordVisible = false;
   final GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
   TextEditingController password = TextEditingController();
-  final phoneNumber = TextEditingController();
+  final username = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,17 +62,17 @@ class _SplashPanelState extends State<SplashPanel> {
                       color: Color(0xFFebebeb)
                     ),
                     child: TextFormField(
-                      controller: phoneNumber,
+                      controller: username,
                       validator: (value) {
                         if (value == null || value.isEmpty || isValidPhoneNumber(value)) {
-                          return 'Please enter a valid phone number';
+                          return 'Please enter a valid username';
                         }
                         return null;
                       },
                       cursorColor: Color(0xFF472cdc),
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(20),
-                        hintText: "Phone Number...",
+                        hintText: "Username...",
                         hintStyle: TextStyle(
                           color: Color(0xFF472cdc).withOpacity(0.8)
                         ),
@@ -129,18 +130,28 @@ class _SplashPanelState extends State<SplashPanel> {
               children: [
                 GestureDetector(
                   onTap: () async {
-                    // User user = User(
-                    //   id: ObjectId(),
-                    //   location: Location(
-                    //       id: ObjectId(), type: "Point", coordinates: [-120.6595, 35.2826]),
-                    //   phoneNumber: phoneNumber.text,
-                    //   firstName: "TEST",
-                    //   lastName: "YU"
-                    //   // password: password.text
-                    // );
-                    // await MongoDatabase.insert(user);
-                    Navigator.popAndPushNamed(context, '/');
-                  },
+                    await MongoDatabase.connect();
+                    var user = await MongoDatabase.getUser(username.text);
+                    if (user == null) {
+                      User user = User(
+                        location: Location(
+                            id: ObjectId(),
+                            type: "Point",
+                            coordinates: [-120.6595, 35.2869]),
+                        username: username.text,
+                        password: password.text,
+                        firstName: "Roman",
+                        lastName: "Black",
+                        phoneNumber: "1234567890",
+                        bio: "",
+                        friends: [],
+                        preferredStatus: 0,
+                        socials: {},
+                      );
+                      MongoDatabase.insert(user);
+                      Navigator.popAndPushNamed(context, '/', arguments: user);
+                    }
+                    },
                   child: Container(
                     width: 160,
                     height: 50,
@@ -162,7 +173,21 @@ class _SplashPanelState extends State<SplashPanel> {
                 const Padding(padding: EdgeInsets.fromLTRB(30, 50, 0, 50)),
                 GestureDetector(
                   onTap: () async {
-                    Navigator.popAndPushNamed(context, '/');
+                    await MongoDatabase.connect();
+                    // print("Congrats on connecting.");
+                    var user = await MongoDatabase.getUser(username.text);
+                    // print("This is the gotten user:");
+                    // print(user);
+                    if (user == null) {
+                      print("User does not exist.");
+                    } else {
+                      if (user.password == password.text) {
+                        Navigator.popAndPushNamed(context, '/', arguments: user);
+                      } else {
+                        print("Incorrect password.");
+                        // TODO
+                      }
+                    }
                   },
                   child: Container(
                     width: 160,
