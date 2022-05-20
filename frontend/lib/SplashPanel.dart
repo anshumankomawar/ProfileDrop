@@ -148,7 +148,7 @@ class _SplashPanelState extends State<SplashPanel> {
                         preferredStatus: 0,
                         socials: {},
                       );
-                      MongoDatabase.insert(user);
+                      await MongoDatabase.insert(user);
                       Navigator.popAndPushNamed(context, '/', arguments: user);
                     }
                     },
