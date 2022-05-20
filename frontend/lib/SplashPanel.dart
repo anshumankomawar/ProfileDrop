@@ -2,6 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/Database.dart';
+import 'package:frontend/models/Location.dart';
+import 'package:frontend/models/User.dart';
+import 'package:mongo_dart/mongo_dart.dart' show ObjectId;
+
 
 class SplashPanel extends StatefulWidget {
   const SplashPanel({Key? key}) : super(key: key);
@@ -11,10 +16,13 @@ class SplashPanel extends StatefulWidget {
 }
 
 class _SplashPanelState extends State<SplashPanel> {
+  bool _passwordVisible = false;
+  final GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
+  TextEditingController password = TextEditingController();
+  final phoneNumber = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final password = TextEditingController();
-    final username = TextEditingController();
 
     return Material(
       // color: Color(0xFF472cdc),
@@ -53,7 +61,7 @@ class _SplashPanelState extends State<SplashPanel> {
                       color: Color(0xFFebebeb)
                     ),
                     child: TextFormField(
-                      controller: username,
+                      controller: phoneNumber,
                       validator: (value) {
                         if (value == null || value.isEmpty || isValidPhoneNumber(value)) {
                           return 'Please enter a valid phone number';
@@ -68,10 +76,6 @@ class _SplashPanelState extends State<SplashPanel> {
                           color: Color(0xFF472cdc).withOpacity(0.8)
                         ),
                         border: InputBorder.none
-                        // floatingLabelBehavior: FloatingLabelBehavior.always,
-                        // border: OutlineInputBorder(
-                        //   borderRadius: BorderRadius.circular(10),
-                        // )
                       ),
                     ),
                   ),
@@ -84,7 +88,8 @@ class _SplashPanelState extends State<SplashPanel> {
                       color: Color(0xFFebebeb)
                     ),
                     child: TextFormField(
-                      controller: username,
+                      controller: password,
+                      obscureText: _passwordVisible,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a valid password';
@@ -93,16 +98,25 @@ class _SplashPanelState extends State<SplashPanel> {
                       },
                       cursorColor: Color(0xFF472cdc),
                       decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _passwordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
+                          },
+                        ),
                         contentPadding: EdgeInsets.all(20),
                         hintText: "Password...",
                         hintStyle: TextStyle(
                           color: Color(0xFF472cdc).withOpacity(0.8)
                         ),
                         border: InputBorder.none
-                        // floatingLabelBehavior: FloatingLabelBehavior.always,
-                        // border: OutlineInputBorder(
-                        //   borderRadius: BorderRadius.circular(10),
-                        // )
                       ),
                     ),
                   ),
@@ -114,15 +128,23 @@ class _SplashPanelState extends State<SplashPanel> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
+                  onTap: () async {
+                    // User user = User(
+                    //   id: ObjectId(),
+                    //   location: Location(
+                    //       id: ObjectId(), type: "Point", coordinates: [-120.6595, 35.2826]),
+                    //   phoneNumber: phoneNumber.text,
+                    //   firstName: "TEST",
+                    //   lastName: "YU"
+                    //   // password: password.text
+                    // );
+                    // await MongoDatabase.insert(user);
+                    Navigator.popAndPushNamed(context, '/');
+                  },
                   child: Container(
                     width: 160,
                     height: 50,
                     decoration: BoxDecoration(
-                      // border: Border.all(
-                      //   color: Color(0xFF472cdc).withOpacity(0.5),
-                      //   style: BorderStyle.solid,
-                      //   width: 1.5,
-                      // ),
                       color: Color(0xFF472cdc).withOpacity(0.2),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
@@ -139,6 +161,9 @@ class _SplashPanelState extends State<SplashPanel> {
                 ),
                 const Padding(padding: EdgeInsets.fromLTRB(30, 50, 0, 50)),
                 GestureDetector(
+                  onTap: () async {
+                    Navigator.popAndPushNamed(context, '/');
+                  },
                   child: Container(
                     width: 160,
                     height: 50,
