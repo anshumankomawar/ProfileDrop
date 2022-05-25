@@ -124,30 +124,13 @@ class _SplashPanelState extends State<SplashPanel> {
             children: [
               GestureDetector(
                   onTap: () async {
-                    // await MongoDatabase.connect();
-                    // var user = await MongoDatabase.getUser(username.text);
-                    // if (user == null) {
-                    //   User user = User(
-                    //     location: Location(
-                    //         id: ObjectId(),
-                    //         type: "Point",
-                    //         coordinates: [-120.6595, 35.2869]),
-                    //     username: username.text,
-                    //     password: password.text,
-                    //     firstName: "Roman",
-                    //     lastName: "Black",
-                    //     phoneNumber: "1234567890",
-                    //     bio: "",
-                    //     friends: [],
-                    //     preferredStatus: 0,
-                    //     socials: {},
-                    //   );
-                    //   MongoDatabase.insert(user);
+                    Navigator.pop(context);
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => RegistrationPage(
-                          inUsername: username, inPassword: password),
+                          inUsername: username.text, inPassword: password.text),
                     ));
-                      // Navigator.of(context).pop();
+                    // Navigator.popAndPushNamed(context, '/registration',
+                    //     arguments: {username, password});
                   },
                   child: Container(
                       width: 160,

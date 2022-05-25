@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/CustomTextInput.dart';
 import 'package:frontend/Database.dart';
 import 'package:frontend/models/Location.dart';
 import 'package:frontend/models/User.dart';
 import 'package:mongo_dart/mongo_dart.dart' show ObjectId;
 
 class RegistrationPage extends StatefulWidget {
-  final TextEditingController inUsername;
-  final TextEditingController inPassword;
+  final String inUsername;
+  final String inPassword;
   const RegistrationPage(
       {Key? key, required this.inUsername, required this.inPassword})
       : super(key: key);
@@ -19,12 +20,14 @@ class RegistrationPage extends StatefulWidget {
 class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
-    final username = widget.inUsername;
+    final username = TextEditingController();
     final firstName = TextEditingController();
     final lastName = TextEditingController();
     final phoneNumber = TextEditingController();
-    final password = widget.inPassword;
+    final password = TextEditingController();
     final passwordConfirm = TextEditingController();
+    username.text = widget.inUsername;
+    password.text = widget.inPassword;
 
     return Material(
       child: Center(
@@ -32,7 +35,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 64, 0, 16),
           child: Text(
-            "Registration Page",
+            "Registration",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 30,
@@ -40,142 +43,72 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ),
           ),
         ),
+        CustomTextInput(
+            inputController: username,
+            validator: inputValidation,
+            textName: "Username"),
+        CustomTextInput(
+            inputController: phoneNumber,
+            validator: isValidPhoneNumber,
+            textName: "Phone Number"),
+        CustomTextInput(
+            inputController: firstName,
+            validator: inputValidation,
+            textName: "First Name"),
+        CustomTextInput(
+            inputController: lastName,
+            validator: inputValidation,
+            textName: "Last Name"),
+        CustomTextInput(
+            inputController: password,
+            validator: inputValidation,
+            textName: "Password"),
+        CustomTextInput(
+            inputController: passwordConfirm,
+            validator: inputValidation,
+            textName: "Confirm Password"),
         Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextFormField(
-            controller: username,
-            // validator: (value) {
-            //   if (value == null || value.isEmpty) {
-            //     return 'Please enter a valid username';
-            //   }
-            //   return null;
-            // },
-            decoration: InputDecoration(
-                hintText: "Username...",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                )),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextFormField(
-            controller: phoneNumber,
-            // validator: (value) {
-            //   if (value == null || value.isEmpty || isValidPhoneNumber(value)) {
-            //     return 'Please enter a valid phone number';
-            //   }
-            //   return null;
-            // },
-            decoration: InputDecoration(
-                hintText: "Phone Number...",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                )),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextFormField(
-            controller: firstName,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter first name';
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+          child: GestureDetector(
+            onTap: () async {
+              await MongoDatabase.connect();
+              var user = await MongoDatabase.getUser(username.text);
+              if (user == null) {
+                User user = User(
+                  location: Location(
+                      id: ObjectId(),
+                      type: "Point",
+                      coordinates: [-120.6595, 35.2869]),
+                  username: username.text,
+                  password: passwordConfirm.text,
+                  firstName: firstName.text,
+                  lastName: lastName.text,
+                  phoneNumber: phoneNumber.text,
+                  bio: "",
+                  friends: [],
+                  preferredStatus: 0,
+                  socials: {},
+                );
+                await MongoDatabase.insert(user);
+                Navigator.popAndPushNamed(context, '/', arguments: user);
               }
-              return null;
             },
-            decoration: InputDecoration(
-                hintText: "First Name...",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                )),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextFormField(
-            controller: lastName,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter last name';
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-                hintText: "Last Name...",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                )),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextFormField(
-            controller: password,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a valid password';
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-                hintText: "Password...",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                )),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextFormField(
-            controller: passwordConfirm,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a valid password';
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-                hintText: "Confirm Password...",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                )),
-          ),
-        ),
-        TextButton(
-          style: TextButton.styleFrom(
-            textStyle: const TextStyle(fontSize: 32),
-          ),
-          onPressed: () async {
-            await MongoDatabase.connect();
-            var user = await MongoDatabase.getUser(username.text);
-            if (user == null) {
-              User user = User(
-                location: Location(
-                    id: ObjectId(),
-                    type: "Point",
-                    coordinates: [-120.6595, 35.2869]),
-                username: username.text,
-                password: passwordConfirm.text,
-                firstName: firstName.text,
-                lastName: lastName.text,
-                phoneNumber: phoneNumber.text,
-                bio: "",
-                friends: [],
-                preferredStatus: 0,
-                socials: {},
-              );
-              await MongoDatabase.insert(user);
-              Navigator.popAndPushNamed(context, '/', arguments: user);
-            }
-          },
-          child: const Text('Register'),
+            child: Container(
+              width: 160,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Color(0xFF472cdc).withOpacity(0.2),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: const Center(
+                child: Text(
+                  "Register",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ))),
         ),
         TextButton(
           style: TextButton.styleFrom(
@@ -184,7 +117,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
           onPressed: () async {
             Navigator.popAndPushNamed(context, '/login');
           },
-          child: const Text('Have an account? Login'),
+          child: const Text('Have an account? Login', 
+            style: TextStyle(color: Color(0xFF472cdc))
+          ),
         )
       ])),
     );
@@ -199,5 +134,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
       }
     }
     return count == 10;
+  }
+
+  String? inputValidation(String value, String textName) {
+    if (value.isEmpty || value == null) {
+      return "Please input a valid " + textName;
+    }
+    return null;
   }
 }
