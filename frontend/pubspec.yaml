@@ -43,6 +43,7 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   mongo_dart: ^0.7.4+1
   intl: ^0.17.0
+  flutter_secure_storage: ^5.0.2
 
 dev_dependencies:
   flutter_test:
