@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         // When navigating to the "/" route, build the FirstScreen widget.
         '/': (context) => const MyHomePage(),
         // When navigating to the "/second" route, build the SecondScreen widget.
-        '/profile': (context) => const Profile(),
+        //'/profile': (context) => const Profile(),
         '/registration': (context) => const RegistrationPage(),
         '/login': (context) => const LoginPage(),
         '/splash': (context) => const SplashPanel(),
