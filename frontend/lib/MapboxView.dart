@@ -1,7 +1,9 @@
 import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:user_location/user_location.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart' as latlng;
+import 'package:frontend/models/Location.dart';
 
 import 'OtherProfile.dart';
 import 'models/User.dart';
@@ -65,7 +67,7 @@ class _MapboxViewState extends State<MapboxView> {
 
     return FlutterMap(
         options: MapOptions(
-          center: latlng.LatLng(35.2828, -120.6596),
+          center: LatLng(widget.user.location.coordinates[1], widget.user.location.coordinates[0]),
           zoom: 13.0,
           plugins: [
             UserLocationPlugin(),
