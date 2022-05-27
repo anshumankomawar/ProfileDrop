@@ -1,13 +1,12 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:frontend/Database.dart';
 import 'package:frontend/UserAuth/RegistrationPage.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/models/Location.dart';
 import 'package:frontend/models/User.dart';
 import 'package:mongo_dart/mongo_dart.dart' show ObjectId;
+import 'package:frontend/Constants.dart';
 
 class SplashPanel extends StatefulWidget {
   const SplashPanel({Key? key}) : super(key: key);
@@ -21,6 +20,36 @@ class _SplashPanelState extends State<SplashPanel> {
   final GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
   TextEditingController password = TextEditingController();
   final username = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (AUTO_LOGIN == "true") {
+      SchedulerBinding.instance?.addPostFrameCallback((_){
+        _login();
+      });
+    }
+  }
+
+  _login() async {
+    User user = User(
+      location: Location(
+          id: ObjectId(),
+          type: "Point",
+          coordinates: [-120.6595, 35.2869]),
+      username: "isrickykorean",
+      password: "sureheis",
+      firstName: "Roman",
+      lastName: "Black",
+      phoneNumber: "1234567890",
+      bio: "",
+      friends: [],
+      preferredStatus: 0,
+      socials: {},
+    );
+    await MongoDatabase.connect();
+    Navigator.popAndPushNamed(context, "/", arguments: user);
+  }
 
   @override
   Widget build(BuildContext context) {

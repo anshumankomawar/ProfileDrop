@@ -1,9 +1,9 @@
 import 'package:flutter_map/flutter_map.dart';
 import 'package:user_location/user_location.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/Database.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 
+import 'OtherProfile.dart';
 import 'models/User.dart';
 
 class MapboxView extends StatefulWidget {
@@ -23,19 +23,7 @@ class _MapboxViewState extends State<MapboxView> {
   @override
   Widget build(BuildContext context) {
     print(widget.user.location.coordinates[0].toString() +  widget.user.location.coordinates[1].toString());
-    List<Marker> markers = [
-      Marker(
-        point: latlng.LatLng(widget.user.location.coordinates[1], widget.user.location.coordinates[0]),
-        builder: (BuildContext context) { return Container(
-          decoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
-          width: 12,
-          height: 12,
-          padding: const EdgeInsets.all(10),
-        ); },
-        width: 30.0,
-        height: 30.0,
-      ),
-    ];
+    List<Marker> markers = [];
 
     // print(widget.user.location)
     for (int i = 0; i < widget.nearbyUsers.length; i++) {
@@ -44,16 +32,36 @@ class _MapboxViewState extends State<MapboxView> {
             point:
             latlng.LatLng(widget.nearbyUsers[i].location.coordinates[1],
                 widget.nearbyUsers[i].location.coordinates[0]),
-            builder: (BuildContext context) { return Container(
-              decoration: BoxDecoration(color: Colors.green,
-                  shape: BoxShape.circle),
-              width: 12,
-              height: 12,
-              padding: const EdgeInsets.all(10),
-            ); },
             width: 30.0,
-            height: 30.0,));
+            height: 30.0,
+            builder:  (BuildContext context) => GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => OtherProfile(mainUser: widget.user, user: widget.nearbyUsers[i])),
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(color: Colors.green,
+                    shape: BoxShape.circle),
+                width: 12,
+                height: 12,
+                padding: const EdgeInsets.all(10),
+              ),
+            )));
     }
+
+    markers.add(Marker(
+      point: latlng.LatLng(widget.user.location.coordinates[1], widget.user.location.coordinates[0]),
+      builder: (BuildContext context) { return Container(
+        decoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
+        width: 12,
+        height: 12,
+        padding: const EdgeInsets.all(10),
+      ); },
+      width: 30.0,
+      height: 30.0,
+    ));
 
     return FlutterMap(
         options: MapOptions(
