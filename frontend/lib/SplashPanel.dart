@@ -8,6 +8,7 @@ import 'package:frontend/models/User.dart';
 import 'package:mongo_dart/mongo_dart.dart' show ObjectId;
 import 'package:frontend/Constants.dart';
 import 'package:geolocator/geolocator.dart' ;
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class SplashPanel extends StatefulWidget {
   const SplashPanel({Key? key}) : super(key: key);
@@ -220,7 +221,14 @@ class _SplashPanelState extends State<SplashPanel> {
                     var user = await MongoDatabase.getUser(username.text);
                     // print("This is the gotten user:");
                     // print(user);
-                    Position position = await _getGeoLocationPosition();
+                    // Position position = await _getGeoLocationPosition();
+                    Position? position;
+                    _getGeoLocationPosition().then((value) {
+                      position = value;
+                    }).catchError((e) { 
+                      Alert(context: context, title: "Error", desc: "Location permissions are currently denied. Please enable permissions by navigating to Settings > Drop > Location > Always.").show();
+                      print(e);
+                    });
                     print(position);
                     print('sdfsdf');
                     if (user == null) {

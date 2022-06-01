@@ -6,6 +6,7 @@ import 'package:frontend/models/Location.dart';
 import 'package:frontend/models/User.dart';
 import 'package:mongo_dart/mongo_dart.dart' show ObjectId;
 import 'package:geolocator/geolocator.dart' ;
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class RegistrationPage extends StatefulWidget {
   final String inUsername;
@@ -35,6 +36,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
 
     permission = await Geolocator.checkPermission();
+    permission = LocationPermission.denied;
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
@@ -132,14 +134,20 @@ class _RegistrationPageState extends State<RegistrationPage> {
               onTap: () async {
                 await MongoDatabase.connect();
                 var user = await MongoDatabase.getUser(username.text);
-                Position position = await _getGeoLocationPosition();
-                _formKey.currentState!.validate();
-                if (user == null) {
+                Position? position;
+                _getGeoLocationPosition().then((value) {
+                  position = value;
+                }).catchError((e) { 
+                  Alert(context: context, title: "Error", desc: "Location permissions are currently denied. Please enable permissions by navigating to Settings > Drop > Location > Always.").show();
+                  print(e);
+                });
+                // Position position = await _getGeoLocationPosition();
+                if (_formKey.currentState!.validate() && user == null) {
                   User user = User(
                     location: Location(
                         id: ObjectId(),
                         type: "Point",
-                        coordinates: [position.longitude, position.latitude]),
+                        coordinates: [position!.longitude, position!.latitude]),
                     username: username.text,
                     password: passwordConfirm.text,
                     firstName: firstName.text,
