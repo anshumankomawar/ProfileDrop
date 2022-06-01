@@ -27,7 +27,7 @@ class _CustomTextInputState extends State<CustomTextInput> {
         child: TextFormField(
           controller: widget.inputController,
           validator: (value) {
-            return (widget.validator(value));
+            return (widget.validator(value, widget.textName));
           },
           cursorColor: Color(0xFF472cdc),
           decoration: InputDecoration(

@@ -5,18 +5,18 @@ import 'package:frontend/models/User.dart';
 import 'package:mongo_dart/mongo_dart.dart' show ObjectId;
 
 class Profile extends StatefulWidget {
-  const Profile({ Key? key }) : super(key: key);
+  final User user;
+  const Profile({required this.user, Key? key }) : super(key: key);
 
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-  final firstName = TextEditingController();
-  final lastName = TextEditingController();
-  final phoneNumber = TextEditingController();
-  final location = TextEditingController();
-  final biography = TextEditingController();
+  final TextEditingController firstName = TextEditingController();
+  final TextEditingController lastName = TextEditingController();
+  final TextEditingController phoneNumber = TextEditingController();
+  final TextEditingController bio = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +44,25 @@ class _ProfileState extends State<Profile> {
                     if (_formKey.currentState!.validate()) {
                       // If the form is valid, display a snackbar. In the real world,
                       // you'd often call a server or save the information in a database.
-                      // User user = User(
-                      //   id: ObjectId(),
-                      //   location: Location(id: ObjectId(), type: "Point", coordinates: [-137, 40]),
-                      //   firstName: firstName.text,
-                      //   lastName: lastName.text,
-                      //   phoneNumber: phoneNumber.text
-                      // );
-                      // await MongoDatabase.insert(user);
+                      User newUser = User(
+                        location: widget.user.location,
+                        username: widget.user.username,
+                        password: widget.user.password,
+                        firstName: firstName.text,
+                        lastName: lastName.text,
+                        phoneNumber: phoneNumber.text,
+                        bio: bio.text,
+                        friends: widget.user.friends,
+                        preferredStatus: widget.user.preferredStatus,
+                        PFP: widget.user.PFP,
+                        college: widget.user.college,
+                        major: widget.user.major,
+                        job: widget.user.job,
+                        song: widget.user.song,
+                        socials: widget.user.socials
+                      );
+
+                      await MongoDatabase.update(newUser);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Successfully saved user')),
                       );
@@ -70,6 +81,11 @@ class _ProfileState extends State<Profile> {
   final _formKey = GlobalKey<FormState>();
 
   Widget _profileFields(BuildContext context) {
+    firstName.text = widget.user.firstName;
+    lastName.text = widget.user.lastName;
+    phoneNumber.text = widget.user.phoneNumber;
+    bio.text = widget.user.bio;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Form(
@@ -81,11 +97,13 @@ class _ProfileState extends State<Profile> {
                 Container(
                   width: 150,
                   height: 150,
-                  child: const Icon(Icons.person_add_alt_1_rounded, size: 100),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(150),
-                    border: Border.all(color: Colors.black)
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: NetworkImage(
+                            "https://i.imgur.com/BoN9kdC.png")
+                    )
                   ),
                 ),
                 const Padding(padding: EdgeInsets.only(right: 30.0)),
@@ -135,6 +153,7 @@ class _ProfileState extends State<Profile> {
               children: [
                 Flexible(
                   child: TextFormField(
+                    controller: phoneNumber,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please select a location';
@@ -157,7 +176,7 @@ class _ProfileState extends State<Profile> {
               children: [
                 Flexible(
                   child: TextFormField(
-                    controller: biography,
+                    controller: bio,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter a bio';
