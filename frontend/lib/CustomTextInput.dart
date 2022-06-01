@@ -25,6 +25,7 @@ class _CustomTextInputState extends State<CustomTextInput> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10), color: Color(0xFFebebeb)),
         child: TextFormField(
+          obscureText: widget.textName == "Password" || widget.textName == "Confirm Password",
           controller: widget.inputController,
           validator: (value) {
             return (widget.validator(value, widget.textName));

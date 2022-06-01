@@ -50,18 +50,19 @@ class MongoDatabase {
       result.add(User.fromMap(data));
     });
 
+    List<User> temp =  List.from(result);
     for (User item in result){
-      if(item.preferredStatus == 4){
-        result.remove(item);
+      if(item.preferredStatus == 3){
+        temp.remove(item);
       }
-      if(item.preferredStatus == 3 && !user.friends.contains(item.username)){
-        result.remove(item);
+      if(item.preferredStatus == 2 && !user.friends.contains(item.username)){
+        temp.remove(item);
       }
     }
 
-    result.sort((a,b) => (a.location.distanceTo(user.location)).compareTo(b.location.distanceTo(user.location)));
-    if(result.length == 1) return [];
-    return result.sublist(1, result.length > 15 ? 15: result.length);
+    temp.sort((a,b) => (a.location.distanceTo(user.location)).compareTo(b.location.distanceTo(user.location)));
+    if(temp.length == 1) return [];
+    return temp.sublist(1, temp.length > 15 ? 15: temp.length);
   }
 
   static insert(User user) async {
@@ -72,29 +73,8 @@ class MongoDatabase {
   }
 
   static update(User user) async {
-    // var u = await userCollection.findOne(where.eq("username", user.username));
-    // u["location"] = user.location;
-    // u["firstName"] = user.firstName;
-    // u["lastName"] = user.lastName;
-    // u["phoneNumber"] = user.phoneNumber;
-    // u["bio"] = user.bio;
-    // u["friends"] = user.friends;
-    // u["preferredStatus"] = user.preferredStatus;
-    // u["PFP"] = user.PFP;
-    // u["college"] = user.college;
-    // u["major"] = user.major;
-    // u["college"] = user.college;
-    // u["job"] = user.job;
-    // u["song"] = user.song;
-    // u["socials"] = user.socials;
-
     await userCollection.replaceOne(where.eq('username', user.username), user.toMap());
   }
-
-
-  // static delete(User user) async {
-  //   await userCollection.remove(where.id(user.id));
-  // }
 
   static test() {}
 }
