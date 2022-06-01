@@ -72,9 +72,26 @@ class MongoDatabase {
   }
 
   static update(User user) async {
-    print("updated");
+    // var u = await userCollection.findOne(where.eq("username", user.username));
+    // u["location"] = user.location;
+    // u["firstName"] = user.firstName;
+    // u["lastName"] = user.lastName;
+    // u["phoneNumber"] = user.phoneNumber;
+    // u["bio"] = user.bio;
+    // u["friends"] = user.friends;
+    // u["preferredStatus"] = user.preferredStatus;
+    // u["PFP"] = user.PFP;
+    // u["college"] = user.college;
+    // u["major"] = user.major;
+    // u["college"] = user.college;
+    // u["job"] = user.job;
+    // u["song"] = user.song;
+    // u["socials"] = user.socials;
+
+    await userCollection.replaceOne(where.eq('username', user.username), user.toMap());
   }
-  //
+
+
   // static delete(User user) async {
   //   await userCollection.remove(where.id(user.id));
   // }
