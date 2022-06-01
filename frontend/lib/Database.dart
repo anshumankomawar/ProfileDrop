@@ -50,6 +50,14 @@ class MongoDatabase {
       result.add(User.fromMap(data));
     });
 
+    for (User item in result){
+      if(item.preferredStatus == 4){
+        result.remove(item);
+      }
+      if(item.preferredStatus == 3 && !user.friends.contains(item.username)){
+        result.remove(item);
+      }
+    }
 
     result.sort((a,b) => (a.location.distanceTo(user.location)).compareTo(b.location.distanceTo(user.location)));
     if(result.length == 1) return [];
@@ -63,15 +71,9 @@ class MongoDatabase {
     await userCollection.insertAll([user.toMap()]);
   }
 
-  // static update(User user) async {
-  //   var u = await userCollection.findOne({"_id": user.id});
-  //   u["location"] = user.location;
-  //   // u["username"] = user.username;
-  //   u["firstName"] = user.firstName;
-  //   u["lastName"] = user.lastName;
-  //   u["phoneNumber"] = user.phoneNumber;
-  //   await userCollection.save(u);
-  // }
+  static update(User user) async {
+    print("updated");
+  }
   //
   // static delete(User user) async {
   //   await userCollection.remove(where.id(user.id));
