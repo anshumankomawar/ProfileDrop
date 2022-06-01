@@ -138,7 +138,6 @@ class _BottomPanelState extends State<BottomPanel> {
                             onTap: () {
                               Navigator.push(
                                 context,
-                         builder: (context) => const Profile()),
                                 MaterialPageRoute(builder: (context) => Profile(user: user)),
                               );
                             },
