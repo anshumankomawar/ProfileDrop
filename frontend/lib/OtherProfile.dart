@@ -28,12 +28,8 @@ class _OtherProfileState extends State<OtherProfile> {
                       Navigator.pop(context);
                     },
                   ),
-                  // Text(
-                  //   widget.user.username,
-                  //   textScaleFactor: 1.5,
-                  // ),
                   Text(
-                    "chilledlemon",
+                    widget.user.username,
                     textScaleFactor: 1.5,
                   ),
                   GestureDetector(
@@ -102,9 +98,8 @@ class _OtherProfileState extends State<OtherProfile> {
                 ),
               )
             ),
-            Container(
+            SizedBox(
               width: 300,
-              height: populatedFields.children.length*20 + 20,
               child: Card(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                 color: Color(0xFFebebeb),
@@ -124,32 +119,27 @@ class _OtherProfileState extends State<OtherProfile> {
 
   Column getCareerInfo(User user){
     List<Text> entries = [];
-    entries.add(Text("CalPoly: Computer Science"));
-    entries.add(Text("Amazon: Janitor"));
-    // if (user.university != ""){
-    //   if (user.major != ""){
-    //     entries.add(Text(widget.user.university + ": " + widget.user.major));
-    //   }
-    //   else{
-    //     entries.add(Text("College: " + widget.user.university));
-    //   }
-    // }
-    // else if (user.major != ""){
-    //   entries.add(Text("Major: " + widget.user.major));
-    // }
-    //
-    // if (user.company != ""){
-    //   if (user.job != ""){
-    //     entries.add(Text(widget.user.company + ": " + widget.user.job));
-    //   }
-    //   else{
-    //     entries.add(Text("Company: " + widget.user.company));
-    //   }
-    // }
-    // else if (user.job != ""){
-    //   entries.add(Text("Title: " + widget.user.job));
-    // }
-    //
+    if (user.college != ""){
+      if (user.major != ""){
+        entries.add(Text(widget.user.college + ": " + widget.user.major));
+      }
+      else{
+        entries.add(Text("College: " + widget.user.college));
+      }
+    }
+    else if (user.major != ""){
+      entries.add(Text("Major: " + widget.user.major));
+    }
+    
+    if (user.job != ""){
+      if (user.job != ""){
+        entries.add(Text(widget.user.job + ": " + widget.user.job));
+      }
+      else{
+        entries.add(Text("Job: " + widget.user.job));
+      }
+    }
+    
     Column col = Column(children: entries);
     return col;
   }
@@ -157,33 +147,34 @@ class _OtherProfileState extends State<OtherProfile> {
   Column buildSubDescription(User user){
     List<Row> entries = [];
 
-    entries.add(Row(
-      children: [
-        Flexible(
-          child: Text("widget.user.phoneNumber"),
-        ),
-        const Padding(padding: EdgeInsets.only(top: 10.0)),
-      ],
-    ));
-    entries.add(Row(
-      children: [
-        Flexible(
-          child: Text("widget.user.bio"),
-        ),
-        const Padding(padding: EdgeInsets.only(top: 10.0)),
-      ],
-    ));
+    if (user.phoneNumber != ""){
+      entries.add(Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
+            child: Flexible(
+              child: Text("Phone Number: " + widget.user.phoneNumber),
+            ),
+          ),
+          const Padding(padding: EdgeInsets.only(top: 10.0)),
+        ],
+      ));
+    }
 
-    // if (user.phoneNumber != ""){
-    //   entries.add(Row(
-    //     children: [
-    //       Flexible(
-    //         child: Text(widget.user.phoneNumber),
-    //       ),
-    //       const Padding(padding: EdgeInsets.only(top: 10.0)),
-    //     ],
-    //   ));
-    // }
+    if (user.bio != ""){
+      entries.add(Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
+            child: SizedBox(
+              width: 250,
+              child: Text("\n" + widget.user.bio),
+            ),
+          ),
+          const Padding(padding: EdgeInsets.only(top: 10.0)),
+        ],
+      ));
+    }
     Column col = Column(children: entries);
     return col;
   }
