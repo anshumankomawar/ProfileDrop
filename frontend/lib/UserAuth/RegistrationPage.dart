@@ -35,7 +35,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
 
     permission = await Geolocator.checkPermission();
-    permission = LocationPermission.denied;
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
@@ -134,19 +133,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 await MongoDatabase.connect();
                 var user = await MongoDatabase.getUser(username.text);
                 Position? position;
-                _getGeoLocationPosition().then((value) {
-                  position = value;
-                }).catchError((e) { 
+                try {
+                  position = await _getGeoLocationPosition();
+                } catch (e) {
                   Alert(context: context, title: "Error", desc: "Location permissions are currently denied. Please enable permissions by navigating to Settings > Drop > Location > Always.").show();
-                  print(e);
-                });
+                }
+                print(position);
                 // Position position = await _getGeoLocationPosition();
-                if (_formKey.currentState!.validate() && user == null) {
+                if (_formKey.currentState!.validate() && user == null && position != null) {
                   User user = User(
                     location: Location(
                         id: ObjectId(),
                         type: "Point",
-                        coordinates: [position!.longitude, position!.latitude]),
+                        coordinates: [position.longitude, position.latitude]),
                     username: username.text,
                     password: passwordConfirm.text,
                     firstName: firstName.text,
