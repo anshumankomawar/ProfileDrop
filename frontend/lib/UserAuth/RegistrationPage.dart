@@ -1,158 +1,197 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/CustomTextInput.dart';
 import 'package:frontend/Database.dart';
 import 'package:frontend/models/Location.dart';
 import 'package:frontend/models/User.dart';
 import 'package:mongo_dart/mongo_dart.dart' show ObjectId;
+import 'package:geolocator/geolocator.dart' ;
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({Key? key}) : super(key: key);
+  final String inUsername;
+  final String inPassword;
+  const RegistrationPage(
+      {Key? key, required this.inUsername, required this.inPassword})
+      : super(key: key);
 
   @override
   State<RegistrationPage> createState() => _RegistrationPageState();
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+
+  Future<Position> _getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    permission = LocationPermission.denied;
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+      
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  }
+
+  _login() async {
+    User user = User(
+      location: Location(
+          id: ObjectId(),
+          type: "Point",
+          coordinates: [-120.6595, 35.2869]),
+      username: "isrickykorean",
+      password: "sureheis",
+      firstName: "Roman",
+      lastName: "Black",
+      phoneNumber: "1234567890",
+      bio: "",
+      friends: [],
+      preferredStatus: 0,
+      socials: {},
+    );
+    await MongoDatabase.connect();
+    Navigator.popAndPushNamed(context, "/", arguments: user);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final username = TextEditingController();
     final firstName = TextEditingController();
     final lastName = TextEditingController();
     final phoneNumber = TextEditingController();
     final password = TextEditingController();
     final passwordConfirm = TextEditingController();
+    username.text = widget.inUsername;
+    password.text = widget.inPassword;
+    final _formKey = GlobalKey<FormState>();
+
     return Material(
-      child: Center(
-          child: Column(children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 64, 0, 16),
-          child: Text(
-            "Registration Page",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
+      child: Form(
+        key: _formKey,
+        child: Center(
+            child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 64, 0, 16),
+            child: Text(
+              "Registration",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextFormField(
-            controller: phoneNumber,
-            // validator: (value) {
-            //   if (value == null || value.isEmpty || isValidPhoneNumber(value)) {
-            //     return 'Please enter a valid phone number';
-            //   }
-            //   return null;
-            // },
-            decoration: InputDecoration(
-                hintText: "Phone Number...",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                )),
+          CustomTextInput(
+              inputController: username,
+              validator: inputValidation,
+              textName: "Username"),
+          CustomTextInput(
+              inputController: phoneNumber,
+              validator: inputValidation,
+              textName: "Phone Number"),
+          CustomTextInput(
+              inputController: firstName,
+              validator: inputValidation,
+              textName: "First Name"),
+          CustomTextInput(
+              inputController: lastName,
+              validator: inputValidation,
+              textName: "Last Name"),
+          CustomTextInput(
+              inputController: password,
+              validator: inputValidation,
+              textName: "Password"),
+          CustomTextInput(
+              inputController: passwordConfirm,
+              validator: inputValidation,
+              textName: "Confirm Password"),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: GestureDetector(
+              onTap: () async {
+                await MongoDatabase.connect();
+                var user = await MongoDatabase.getUser(username.text);
+                Position? position;
+                _getGeoLocationPosition().then((value) {
+                  position = value;
+                }).catchError((e) { 
+                  Alert(context: context, title: "Error", desc: "Location permissions are currently denied. Please enable permissions by navigating to Settings > Drop > Location > Always.").show();
+                  print(e);
+                });
+                // Position position = await _getGeoLocationPosition();
+                if (_formKey.currentState!.validate() && user == null) {
+                  User user = User(
+                    location: Location(
+                        id: ObjectId(),
+                        type: "Point",
+                        coordinates: [position!.longitude, position!.latitude]),
+                    username: username.text,
+                    password: passwordConfirm.text,
+                    firstName: firstName.text,
+                    lastName: lastName.text,
+                    phoneNumber: phoneNumber.text,
+                    bio: "",
+                    friends: [],
+                    preferredStatus: 0,
+                    socials: {},
+                  );
+                  await MongoDatabase.insert(user);
+                  Navigator.popAndPushNamed(context, '/', arguments: user);
+                }
+              },
+              child: Container(
+                width: 160,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Color(0xFF472cdc).withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: const Center(
+                  child: Text(
+                    "Register",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ))),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextFormField(
-            controller: firstName,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter first name';
-              }
-              return null;
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: const TextStyle(fontSize: 16),
+            ),
+            onPressed: () async {
+              Navigator.popAndPushNamed(context, '/splash');
             },
-            decoration: InputDecoration(
-                hintText: "First Name...",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                )),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextFormField(
-            controller: lastName,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter last name';
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-                hintText: "Last Name...",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                )),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextFormField(
-            controller: password,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a valid password';
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-                hintText: "Password...",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                )),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextFormField(
-            controller: passwordConfirm,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a valid password';
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-                hintText: "Confirm Password...",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                )),
-          ),
-        ),
-        TextButton(
-          style: TextButton.styleFrom(
-            textStyle: const TextStyle(fontSize: 32),
-          ),
-          onPressed: () async {
-            print('entedf');
-            // User user = User(
-            //     id: ObjectId(),
-            //     location: Location(
-            //         id: ObjectId(), type: "Point", coordinates: [-120.6595, 35.2826]),
-            //     firstName: firstName.text,
-            //     lastName: lastName.text,
-            //     phoneNumber: phoneNumber.text);
-
-            // await MongoDatabase.insert(user);
-            Navigator.pushNamed(context, '/');
-          },
-          child: const Text('Register'),
-        ),
-        TextButton(
-          style: TextButton.styleFrom(
-            textStyle: const TextStyle(fontSize: 16),
-          ),
-          onPressed: () async {
-            Navigator.popAndPushNamed(context, '/login');
-          },
-          child: const Text('Have an account? Login'),
-        )
-      ])),
+            child: const Text('Have an account? Login', 
+              style: TextStyle(color: Color(0xFF472cdc))
+            ),
+          )
+        ])),
+      ),
     );
   }
 
@@ -165,5 +204,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
       }
     }
     return count == 10;
+  }
+
+  String? inputValidation(String value, String textName) {
+    if (value.isEmpty) {
+      return "Please input a valid " + textName;
+    }
+    return null;
   }
 }

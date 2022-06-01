@@ -8,6 +8,7 @@ import 'package:frontend/models/User.dart';
 // import 'package:mongo_dart/mongo_dart.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/Database.dart';
 
 import 'Profile.dart';
 
@@ -117,6 +118,7 @@ class _BottomPanelState extends State<BottomPanel> {
                               height: 25,
                               child: PageView.builder(
                                   scrollDirection: Axis.horizontal,
+                                  onPageChanged: (value) async {await MongoDatabase.update(user);},
                                   itemCount: 4,
                                   itemBuilder: (_, i) {
                                     return Padding(

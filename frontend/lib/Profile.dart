@@ -97,11 +97,13 @@ class _ProfileState extends State<Profile> {
                 Container(
                   width: 150,
                   height: 150,
-                  child: const Icon(Icons.person_add_alt_1_rounded, size: 100),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(150),
-                    border: Border.all(color: Colors.black)
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: NetworkImage(
+                            "https://i.imgur.com/BoN9kdC.png")
+                    )
                   ),
                 ),
                 const Padding(padding: EdgeInsets.only(right: 30.0)),
