@@ -1,9 +1,5 @@
-import 'package:frontend/NearbyUserList.dart';
 import 'package:frontend/Profile.dart';
-import 'package:frontend/main.dart';
-import 'package:frontend/Events/EventScroller.dart';
-import 'package:frontend/Database.dart';
-import 'package:frontend/models/Location.dart';
+import 'package:frontend/Events/UserScroller.dart';
 import 'package:frontend/models/User.dart';
 // import 'package:mongo_dart/mongo_dart.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -14,7 +10,8 @@ import 'Profile.dart';
 class BottomPanel extends StatefulWidget {
   final User user;
   final List<User> nearbyUsers;
-  const BottomPanel({required this.user, required this.nearbyUsers, Key? key}) : super(key: key);
+  const BottomPanel({required this.user, required this.nearbyUsers, Key? key})
+      : super(key: key);
 
   @override
   _BottomPanelState createState() => _BottomPanelState();
@@ -23,18 +20,17 @@ class BottomPanel extends StatefulWidget {
 class _BottomPanelState extends State<BottomPanel> {
   List<bool> isSelected = [true, false, false];
   List<String> dropdownValue = ["Active"];
-  final double _panelHeightOpen = 800;
+  final double _panelHeightOpen = 400;
   final double _panelHeightClosed = 100.0;
 
   @override
   Widget build(BuildContext context) {
     return SlidingUpPanel(
       panelSnapping: true,
-      snapPoint: 0.5,
       maxHeight: _panelHeightOpen,
       minHeight: _panelHeightClosed,
       parallaxEnabled: true,
-      parallaxOffset: .5,
+      parallaxOffset: 1.0,
       body: Container(),
       panelBuilder: (sc) => _panel(widget.user, sc, isSelected, dropdownValue),
       borderRadius: const BorderRadius.only(
@@ -66,8 +62,8 @@ class _BottomPanelState extends State<BottomPanel> {
     );
   }
 
-  Widget _panel(User user,
-      ScrollController sc, List<bool> isSelected, List<String> dropdownValue) {
+  Widget _panel(User user, ScrollController sc, List<bool> isSelected,
+      List<String> dropdownValue) {
     List<String> _states = ["Active", "Inactive", "Friends", "Privacy"];
     List<MaterialColor> _colors = [
       Colors.green,
@@ -133,26 +129,31 @@ class _BottomPanelState extends State<BottomPanel> {
                           decoration:
                               const BoxDecoration(shape: BoxShape.circle),
                           child: GestureDetector(
-                            child: const Icon(Icons.person, size: 32,),
+                            child: const Icon(
+                              Icons.person,
+                              size: 32,
+                            ),
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const Profile()),
+                                MaterialPageRoute(
+                                    builder: (context) => const Profile()),
                               );
-                            }, 
-                          )
-                        )
+                            },
+                          ))
                       ],
                     ),
                   ),
+                  // Flexible(
+                  //     flex: 3,
+                  //     child:
+                  //     NearbyUserList(
+                  //       user: widget.user, nearbyUsers: widget.nearbyUsers)),
                   Flexible(
-                    flex: 3,
-                    child: NearbyUserList(user: widget.user, nearbyUsers: widget.nearbyUsers)
-                  ),
-                  Flexible(flex: 2, child: EventScroller())
+                      flex: 2,
+                      child: UserScroller(nearbyUsers: widget.nearbyUsers))
                 ],
               ),
-            )
-    ));
+            )));
   }
 }

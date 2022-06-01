@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/CustomTextInput.dart';
 import 'package:frontend/Database.dart';
@@ -115,7 +114,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             textStyle: const TextStyle(fontSize: 16),
           ),
           onPressed: () async {
-            Navigator.popAndPushNamed(context, '/login');
+            Navigator.popAndPushNamed(context, '/splash');
           },
           child: const Text('Have an account? Login', 
             style: TextStyle(color: Color(0xFF472cdc))
