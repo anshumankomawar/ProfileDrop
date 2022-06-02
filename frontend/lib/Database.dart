@@ -19,9 +19,6 @@ class MongoDatabase {
     if (result == null) {
       return null;
     }
-    print("Result: ");
-    print(result);
-    // print((result as User).password);
     return User.fromMap(result);
   }
 
@@ -50,14 +47,14 @@ class MongoDatabase {
       result.add(User.fromMap(data));
     });
 
-    for (User item in result){
-      if(item.preferredStatus == 4){
-        result.remove(item);
-      }
-      if(item.preferredStatus == 3 && !user.friends.contains(item.username)){
-        result.remove(item);
-      }
-    }
+    // for (User item in result){
+    //   if(item.preferredStatus == 4){
+    //     result.remove(item);
+    //   }
+    //   if(item.preferredStatus == 3 && !user.friends.contains(item.username)){
+    //     result.remove(item);
+    //   }
+    // }
 
     result.sort((a,b) => (a.location.distanceTo(user.location)).compareTo(b.location.distanceTo(user.location)));
     if(result.length == 1) return [];

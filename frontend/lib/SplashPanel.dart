@@ -230,7 +230,6 @@ class _SplashPanelState extends State<SplashPanel> {
                       print(e);
                     });
                     print(position);
-                    print('sdfsdf');
                     if (user == null) {
                       print("User does not exist.");
                     } else {
