@@ -17,6 +17,12 @@ class _ProfileState extends State<Profile> {
   final TextEditingController lastName = TextEditingController();
   final TextEditingController phoneNumber = TextEditingController();
   final TextEditingController bio = TextEditingController();
+  final TextEditingController friends = TextEditingController();
+  final TextEditingController college = TextEditingController();
+  final TextEditingController major = TextEditingController();
+  final TextEditingController song = TextEditingController();
+  final TextEditingController job = TextEditingController();
+  final TextEditingController socials = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +40,8 @@ class _ProfileState extends State<Profile> {
                     Navigator.pop(context);
                   },
                 ),
-                const Text(
-                  "Profile",
+                Text(
+                  widget.user.username,
                   textScaleFactor: 1.5,
                 ),
                 GestureDetector(
@@ -86,118 +92,277 @@ class _ProfileState extends State<Profile> {
     lastName.text = widget.user.lastName;
     phoneNumber.text = widget.user.phoneNumber;
     bio.text = widget.user.bio;
+    friends.text = widget.user.friends.toString();
+    college.text = widget.user.college;
+    major.text = widget.user.major;
+    song.text = widget.user.song;
+    job.text = widget.user.job;
+    socials.text = widget.user.socials.toString();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Form(
         key: _formKey,
         child: Column(
-          children: <Widget>[
-            Row(
-              children: [
-                Container(
-                  width: 150,
-                  height: 150,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: NetworkImage(
-                            "https://i.imgur.com/BoN9kdC.png")
-                    )
-                  ),
-                ),
-                const Padding(padding: EdgeInsets.only(right: 30.0)),
-                Expanded(
-                  child: Column(
+
+          children: [
+            Container(
+              width: 300,
+              height: 640,
+              child:
+              ListView(
+                children: <Widget>[
+                  Row(
                     children: [
-                      TextFormField(
-                        controller: firstName,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter first name';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          hintText: "First Name...",
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )
+                      Container(
+                        width: 150,
+                        height: 150,
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: NetworkImage(
+                                    "https://i.imgur.com/BoN9kdC.png")
+                            )
                         ),
                       ),
-                      const Padding(padding: EdgeInsets.only(top: 10.0)),
-                      TextFormField(
-                        controller: lastName,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter last name';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          hintText: "Last Name...",
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )
+                      const Padding(padding: EdgeInsets.only(right: 30.0)),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: firstName,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter first name';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                  hintText: "First Name...",
+                                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  )
+                              ),
+                            ),
+                            const Padding(padding: EdgeInsets.only(top: 10.0)),
+                            TextFormField(
+                              controller: lastName,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter last name';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                  hintText: "Last Name...",
+                                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  )
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            const Padding(padding: EdgeInsets.only(top: 10.0)),
-            Row(
-              children: [
-                Flexible(
-                  child: TextFormField(
-                    controller: phoneNumber,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please select a location';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Location...",
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      )
-                    ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: TextFormField(
+                          controller: phoneNumber,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please input a phone number';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              hintText: "Phone Number...",
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-            const Padding(padding: EdgeInsets.only(top: 10.0)),
-            Row(
-              children: [
-                Flexible(
-                  child: TextFormField(
-                    controller: bio,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a bio';
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.multiline,
-                    maxLines: 5,
-                    decoration: InputDecoration(
-                      hintText: "Bio...",
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      )
-                    ),
-                  ),
-                ),
-              ],
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+
+                  Row(
+                    children: [
+                      Flexible(
+                        child: TextFormField(
+                          controller: bio,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a bio';
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 5,
+                          decoration: InputDecoration(
+                              hintText: "Bio...",
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                        ),
+                      ),
+                    ],
+                  ), // bio
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: TextFormField(
+                          controller: friends,
+                          readOnly: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Friends List';
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 2,
+                          decoration: InputDecoration(
+                              hintText: "Friends List...",
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                        ),
+                      ),
+                    ],
+                  ), // friends
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: TextFormField(
+                          controller: major,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please input a major';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              hintText: "Major...",
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                        ),
+                      ),
+                    ],
+                  ), // college
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: TextFormField(
+                          controller: major,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please input a major';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              hintText: "Major...",
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                        ),
+                      ),
+                    ],
+                  ), // major
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: TextFormField(
+                          controller: job,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please input a job';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              hintText: "Job...",
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                        ),
+                      ),
+                    ],
+                  ), // job
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: TextFormField(
+                          controller: song,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please input a song';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              hintText: "Song...",
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                        ),
+                      ),
+                    ],
+                  ), // song
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: TextFormField(
+                          controller: socials,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please input socials';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              hintText: "Socials...",
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                        ),
+                      ),
+                    ],
+                  ), // socials
+                  const Padding(padding: EdgeInsets.only(top: 10.0))
+                ],
+              ),
             )
-          ],
+          ]
         ),
       ),
     );

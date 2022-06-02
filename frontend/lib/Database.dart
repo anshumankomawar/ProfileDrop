@@ -19,9 +19,6 @@ class MongoDatabase {
     if (result == null) {
       return null;
     }
-    print("Result: ");
-    print(result);
-    // print((result as User).password);
     return User.fromMap(result);
   }
 
