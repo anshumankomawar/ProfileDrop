@@ -23,6 +23,7 @@ class _CustomTextInputState extends State<CustomTextInput> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
         child: TextFormField(
+          obscureText: widget.textName == "Password" || widget.textName == "Confirm Password",
           controller: widget.inputController,
           validator: (value) {
             return (widget.validator(value, widget.textName));

@@ -18,7 +18,7 @@ class SplashPanel extends StatefulWidget {
 }
 
 class _SplashPanelState extends State<SplashPanel> {
-  bool _passwordVisible = false;
+  bool _passwordVisible = true;
   final GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
   TextEditingController password = TextEditingController();
   final username = TextEditingController();
@@ -219,6 +219,7 @@ class _SplashPanelState extends State<SplashPanel> {
                     await MongoDatabase.connect();
                     // print("Congrats on connecting.");
                     var user = await MongoDatabase.getUser(username.text);
+                    print(user);
                     // print("This is the gotten user:");
                     // print(user);
                     // Position position = await _getGeoLocationPosition();
@@ -233,13 +234,14 @@ class _SplashPanelState extends State<SplashPanel> {
                     print('sdfsdf');
                     if (user == null) {
                       print("User does not exist.");
+                      Alert(context: context, desc: "User does not exist").show();
                     } else {
                       if (user.password == password.text) {
                         Navigator.popAndPushNamed(context, '/',
                             arguments: user);
                       } else {
+                        Alert(context: context, desc: "Incorrect password.").show();
                         print("Incorrect password.");
-                        // TODO
                       }
                     }
                   },
