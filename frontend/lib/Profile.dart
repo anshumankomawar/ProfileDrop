@@ -69,6 +69,7 @@ class _ProfileState extends State<Profile> {
                       );
 
                       await MongoDatabase.update(newUser);
+                      Navigator.popAndPushNamed(context, "/", arguments: newUser);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Successfully saved user')),
                       );

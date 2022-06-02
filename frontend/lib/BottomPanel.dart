@@ -73,6 +73,8 @@ class _BottomPanelState extends State<BottomPanel> {
       Colors.grey
     ];
 
+    PageController statePanel = PageController(initialPage: widget.user.preferredStatus);
+
     return MediaQuery.removePadding(
         context: context,
         removeTop: true,
@@ -113,8 +115,28 @@ class _BottomPanelState extends State<BottomPanel> {
                               width: 65,
                               height: 25,
                               child: PageView.builder(
+                                  controller: statePanel,
                                   scrollDirection: Axis.horizontal,
-                                  onPageChanged: (value) async {await MongoDatabase.update(user);},
+                                  onPageChanged: (value) async {
+                                    User newUser = User(
+                                      location: widget.user.location,
+                                      username: widget.user.username,
+                                      password: widget.user.password,
+                                      firstName: widget.user.firstName,
+                                      lastName: widget.user.lastName,
+                                      phoneNumber: widget.user.lastName,
+                                      bio: widget.user.bio,
+                                      friends: widget.user.friends,
+                                      preferredStatus: value,
+                                      PFP: widget.user.PFP,
+                                      college: widget.user.college,
+                                      major: widget.user.major,
+                                      job: widget.user.job,
+                                      song: widget.user.song,
+                                      socials: widget.user.socials
+                                    );
+                                    await MongoDatabase.update(newUser);
+                                  },
                                   itemCount: 4,
                                   itemBuilder: (_, i) {
                                     return Padding(
