@@ -32,11 +32,11 @@ class User {
     required this.bio,
     required this.friends,
     required this.preferredStatus,
-    this.PFP = "", // <optional>
-    this.college = "", // <optional>
-    this.major = "", // <optional>
-    this.job = "", // <optional>
-    this.song = "", // <optional>
+    this.PFP = "",
+    this.college = "",
+    this.major = "",
+    this.job = "",
+    this.song = "",
     required this.socials,
   });
 
