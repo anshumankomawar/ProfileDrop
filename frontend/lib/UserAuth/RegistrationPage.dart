@@ -90,42 +90,42 @@ class _RegistrationPageState extends State<RegistrationPage> {
       child: Form(
         key: _formKey,
         child: Center(
-            child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 64, 0, 16),
-            child: Text(
-              "Registration",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
+          child: Column(children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(0, 64, 0, 16),
+              child: Text(
+                "Registration",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
           CustomTextInput(
-              inputController: username,
-              validator: inputValidation,
-              textName: "Username"),
+            inputController: username,
+            validator: inputValidation,
+            textName: "Username"),
           CustomTextInput(
-              inputController: phoneNumber,
-              validator: inputValidation,
-              textName: "Phone Number"),
+            inputController: phoneNumber,
+            validator: inputValidation,
+            textName: "Phone Number"),
           CustomTextInput(
-              inputController: firstName,
-              validator: inputValidation,
-              textName: "First Name"),
+            inputController: firstName,
+            validator: inputValidation,
+            textName: "First Name"),
           CustomTextInput(
-              inputController: lastName,
-              validator: inputValidation,
-              textName: "Last Name"),
+            inputController: lastName,
+            validator: inputValidation,
+            textName: "Last Name"),
           CustomTextInput(
-              inputController: password,
-              validator: inputValidation,
-              textName: "Password"),
+            inputController: password,
+            validator: inputValidation,
+            textName: "Password"),
           CustomTextInput(
-              inputController: passwordConfirm,
-              validator: inputValidation,
-              textName: "Confirm Password"),
+            inputController: passwordConfirm,
+            validator: inputValidation,
+            textName: "Confirm Password"),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: GestureDetector(
@@ -138,14 +138,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 } catch (e) {
                   Alert(context: context, title: "Error", desc: "Location permissions are currently denied. Please enable permissions by navigating to Settings > Drop > Location > Always.").show();
                 }
-                print(position);
                 // Position position = await _getGeoLocationPosition();
                 if (_formKey.currentState!.validate() && user == null && position != null) {
                   User user = User(
                     location: Location(
-                        id: ObjectId(),
-                        type: "Point",
-                        coordinates: [position.longitude, position.latitude]),
+                      id: ObjectId(),
+                      type: "Point",
+                      coordinates: [position.longitude, position.latitude]),
                     username: username.text,
                     password: passwordConfirm.text,
                     firstName: firstName.text,
