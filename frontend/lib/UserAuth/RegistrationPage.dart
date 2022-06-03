@@ -108,7 +108,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             textName: "Username"),
           CustomTextInput(
             inputController: phoneNumber,
-            validator: inputValidation,
+            validator: isValidPhoneNumber,
             textName: "Phone Number"),
           CustomTextInput(
             inputController: firstName,
@@ -192,7 +192,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
 
-  bool isValidPhoneNumber(String value) {
+  String? isValidPhoneNumber(String value, String textName) {
     List numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     int count = 0;
     for (int i = 0; i < value.length; i++) {
@@ -200,7 +200,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         count += 1;
       }
     }
-    return count == 10;
+    return count == 10 ? null : "Please input a valid $textName";
   }
 
   String? inputValidation(String value, String textName) {
