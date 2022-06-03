@@ -34,15 +34,19 @@ class _OtherProfileState extends State<OtherProfile> {
                   ),
                   GestureDetector(
                     child: const Icon(Icons.add, size: 32),
-                    onTap: () async { //todo add friend to main user
-                      // if (_formKey.currentState!.validate()) {
-                      //   // If the form is valid, display a snackbar. In the real world,
-                      //   // you'd often call a server or save the information in a database.
-                      //   await MongoDatabase.addFriend(user: widget.mainUser, friendId: widget.user.id);
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     const SnackBar(content: Text('Added User')),
-                      //   );
-                      // }
+                    onTap: () async {
+                      if (_formKey.currentState!.validate()) {
+                        // If the form is valid, display a snackbar. In the real world,
+                        // you'd often call a server or save the information in a database.
+                        print(widget.mainUser.username);
+                        print("\n");
+                        print(widget.user.username);
+
+                        await addFriend(widget.mainUser, widget.user);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Added User')),
+                        );
+                      }
                     },
                   ),
                 ],
@@ -177,5 +181,52 @@ class _OtherProfileState extends State<OtherProfile> {
     }
     Column col = Column(children: entries);
     return col;
+  }
+
+  Future<void> addFriend(User mainUser, User user) async {
+    print(mainUser.username + "\n" + user.username);
+    if (mainUser.friends.contains(user.username)){return;}
+
+    List<String> mainUserFriends = mainUser.friends;
+    mainUserFriends.add(user.username);
+    List<String> userFriends = user.friends;
+    userFriends.add(mainUser.username);
+    User newMainUser = User(
+        location: mainUser.location,
+        username: mainUser.username,
+        password: mainUser.password,
+        firstName: mainUser.firstName,
+        lastName: mainUser.lastName,
+        phoneNumber: mainUser.phoneNumber,
+        bio: mainUser.bio,
+        friends: mainUserFriends,
+        preferredStatus: mainUser.preferredStatus,
+        PFP: mainUser.PFP,
+        college: mainUser.college,
+        major: mainUser.major,
+        job: mainUser.job,
+        song: mainUser.song,
+        socials: mainUser.socials
+    );
+    User newUser = User(
+        location: user.location,
+        username: user.username,
+        password: user.password,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phoneNumber: user.phoneNumber,
+        bio: user.bio,
+        friends: userFriends,
+        preferredStatus: user.preferredStatus,
+        PFP: user.PFP,
+        college: user.college,
+        major: user.major,
+        job: user.job,
+        song: user.song,
+        socials: user.socials
+    );
+    await MongoDatabase.update(newMainUser);
+    await MongoDatabase.update(newUser);
+    Navigator.popAndPushNamed(context, "/", arguments: newMainUser);
   }
 }

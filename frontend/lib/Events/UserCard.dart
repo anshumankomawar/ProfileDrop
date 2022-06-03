@@ -4,9 +4,10 @@ import 'package:frontend/models/User.dart';
 import '../OtherProfile.dart';
 
 class UserCard extends StatefulWidget {
+  final User mainUser;
   final User user;
 
-  const UserCard({Key? key, required this.user})
+  const UserCard({Key? key, required this.mainUser, required this.user})
       : super(key: key);
 
   @override
@@ -67,7 +68,7 @@ class _UserCardState extends State<UserCard> {
         onTap: () {                       
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => OtherProfile(mainUser: widget.user, user: widget.user)),
+            MaterialPageRoute(builder: (context) => OtherProfile(mainUser: widget.mainUser, user: widget.user)),
           );
         }
       )
