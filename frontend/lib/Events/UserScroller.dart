@@ -3,8 +3,9 @@ import 'package:frontend/models/User.dart';
 import 'UserCard.dart';
 
 class UserScroller extends StatefulWidget {
+  final User mainUser;
   final List<User> nearbyUsers;
-  const UserScroller({Key? key, required this.nearbyUsers}) : super(key: key);
+  const UserScroller({Key? key, required this.mainUser, required this.nearbyUsers}) : super(key: key);
 
   @override
   State<UserScroller> createState() => _UserScrollerState();
@@ -23,7 +24,7 @@ class _UserScrollerState extends State<UserScroller> {
         scrollDirection: Axis.horizontal,
         itemCount: widget.nearbyUsers.length,
         itemBuilder: (context, index) {
-          return UserCard(user: widget.nearbyUsers[index]);
+          return UserCard(mainUser: widget.mainUser, user: widget.nearbyUsers[index]);
         },
       ),
     );

@@ -34,10 +34,14 @@ class _OtherProfileState extends State<OtherProfile> {
                   ),
                   GestureDetector(
                     child: const Icon(Icons.add, size: 32),
-                    onTap: () async { //todo add friend to main user
+                    onTap: () async {
                       if (_formKey.currentState!.validate()) {
                         // If the form is valid, display a snackbar. In the real world,
                         // you'd often call a server or save the information in a database.
+                        print(widget.mainUser.username);
+                        print("\n");
+                        print(widget.user.username);
+
                         await addFriend(widget.mainUser, widget.user);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Added User')),
@@ -180,11 +184,14 @@ class _OtherProfileState extends State<OtherProfile> {
   }
 
   Future<void> addFriend(User mainUser, User user) async {
+    print(mainUser.username + "\n" + user.username);
+    if (mainUser.friends.contains(user.username)){return;}
+
     List<String> mainUserFriends = mainUser.friends;
     mainUserFriends.add(user.username);
     List<String> userFriends = user.friends;
     userFriends.add(mainUser.username);
-    mainUser = User(
+    User newMainUser = User(
         location: mainUser.location,
         username: mainUser.username,
         password: mainUser.password,
@@ -201,7 +208,7 @@ class _OtherProfileState extends State<OtherProfile> {
         song: mainUser.song,
         socials: mainUser.socials
     );
-    user = User(
+    User newUser = User(
         location: user.location,
         username: user.username,
         password: user.password,
@@ -218,7 +225,8 @@ class _OtherProfileState extends State<OtherProfile> {
         song: user.song,
         socials: user.socials
     );
-    await MongoDatabase.update(mainUser);
-    await MongoDatabase.update(user);
+    await MongoDatabase.update(newMainUser);
+    await MongoDatabase.update(newUser);
+    Navigator.popAndPushNamed(context, "/", arguments: newMainUser);
   }
 }

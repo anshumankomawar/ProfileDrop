@@ -174,7 +174,7 @@ class _BottomPanelState extends State<BottomPanel> {
                   //       user: widget.user, nearbyUsers: widget.nearbyUsers)),
                   Flexible(
                       flex: 2,
-                      child: UserScroller(nearbyUsers: widget.nearbyUsers))
+                      child: UserScroller(mainUser: widget.user, nearbyUsers: widget.nearbyUsers))
                 ],
               ),
             )));
